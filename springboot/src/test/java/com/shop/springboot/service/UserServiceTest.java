@@ -1,5 +1,6 @@
 package com.shop.springboot.service;
 
+import com.shop.springboot.dto.userDto.UserRequestDto;
 import com.shop.springboot.entity.User;
 import com.shop.springboot.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ class UserServiceTest {
         //given
         User user = new User();
         user.setName("spring5");
-        user.setEmail("123@2.com");
+        user.setEmail("12222333@2.com");
         user.setPassword("1234");
         user.setAddr("Addr");
         user.setDetailAddr("DetailAddr");
@@ -46,14 +47,14 @@ class UserServiceTest {
         //given
         User user1 = new User();
         user1.setName("spring5");
-        user1.setEmail("124@1.com");
+        user1.setEmail("1212454@1.com");
         user1.setPassword("1234");
         user1.setAddr("Addr");
         user1.setDetailAddr("DetailAddr");
 
         User user2 = new User();
         user2.setName("spring6");
-        user2.setEmail("125@2.com");
+        user2.setEmail("12123445@2.com");
         user2.setPassword("1234");
         user2.setAddr("Addr");
         user2.setDetailAddr("DetailAddr");
@@ -75,7 +76,7 @@ class UserServiceTest {
         //given
         User user = new User();
         user.setName("spring5");
-        user.setEmail("126@1.com");
+        user.setEmail("1246456776@1.com");
         user.setPassword("1234");
         user.setAddr("Addr");
         user.setDetailAddr("DetailAddr");
@@ -94,7 +95,7 @@ class UserServiceTest {
         //given
         User user = new User();
         user.setName("spring5");
-        user.setEmail("172@2.com");
+        user.setEmail("17367645842@2.com");
         user.setPassword("1234");
         user.setAddr("Addr");
         user.setDetailAddr("DetailAddr");
@@ -110,4 +111,38 @@ class UserServiceTest {
         assertThat(result1.size()).isEqualTo(result2.size());
     }
 
+    @Test
+    public void updatePassword() {
+        //given
+        String newPassword = "NEW_PASSWORD!";
+        //when
+        User result = userService.updatePassword(12l, newPassword);
+
+        //then
+
+        assertThat(result.getPassword()).isEqualTo(newPassword);
+
+    }
+
+    @Test
+    public void updateProfile() {
+        //given
+        String newName = "NEW_NAME!";
+        String newAddr = "NEW_ADDR!";
+        String newDetailAddr = "NEW_DETAILADDR!";
+
+        UserRequestDto userRequestDto = new UserRequestDto();
+
+        userRequestDto.setName(newName);
+        userRequestDto.setAddr(newAddr);
+        userRequestDto.setDetailAddr(newDetailAddr);
+
+        //when
+        User result = userService.updateProfile(12l, userRequestDto);
+
+        //then
+
+        assertThat(result.getName()).isEqualTo(userRequestDto.getName());
+
+    }
 }

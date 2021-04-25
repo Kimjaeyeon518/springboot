@@ -1,5 +1,6 @@
 package com.shop.springboot.restController;
 
+import com.shop.springboot.dto.userDto.UserRequestDto;
 import com.shop.springboot.entity.Product;
 import com.shop.springboot.entity.User;
 import com.shop.springboot.exception.ResourceNotFoundException;
@@ -18,48 +19,58 @@ public class UserRestController {
 
     private final UserService userService;
 
-    //  상품 리스트 조회
+    //  회원 중복 확인
+    @GetMapping("/duplicateCheck")
+    public ResponseEntity<?> duplicateCheck(@RequestParam String email) {
+
+        return ResponseEntity.ok(userService.duplicateCheck(email));
+    }
+
+    //  회원 리스트 조회
     @GetMapping
     public List<User> getAllUsers() {
         return userService.findUsers();
     }
 
-    //  상품 조회
+    //  회원 조회
     @GetMapping("/{id}")
     public User getUserById(@PathVariable(value = "id") long userId) {
         return userService.findOne(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id :" + userId));
     }
 
-    //  상품 등록
+    //  회원 등록
     @PostMapping
     public Long createUser(@RequestBody User user) {
         userService.save(user);
         return user.getId();
     }
 
-    //  상품 수정
+    //  회원 수정
     @PutMapping("/{id}")
-    public Long updateUser(@RequestBody User user, @PathVariable ("id") long userId) {
+    public Long updateUser(@RequestBody UserRequestDto userRequestDto, @PathVariable ("id") long userId) {
         User existingUser = userService.findOne(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id :" + userId));
-
-        existingUser.setName(user.getName());
-        existingUser.setAddr(user.getAddr());
-        existingUser.setDetailAddr(user.getDetailAddr());
-        existingUser.setPassword(user.getPassword());
-
-        userService.save(existingUser);
+        userService.updateProfile(existingUser.getId(), userRequestDto);
 
         return existingUser.getId();
     }
 
-    //  상품 삭제
+    //  회원 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable ("id") long userId){
         User existingUser = userService.findOne(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id :" + userId));
         userService.delete(existingUser);
         return ResponseEntity.ok().build();
+    }
+
+    //  회원 비밀번호 변경
+    @PutMapping("/{id}/password")
+    public Long updatePassword(@PathVariable ("id") long userId, String password) {
+        User existingUser = userService.findOne(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id :" + userId));
+        userService.updatePassword(userId, password);
+        return existingUser.getId();
     }
 }
