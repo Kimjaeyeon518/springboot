@@ -19,8 +19,7 @@ public class ProductService {
 
     // 상품 등록
     public Long save(Product product) {
-        productRepository.save(product);
-        return product.getId();
+        return productRepository.save(product).getId();
     }
 
     // 상품 리스트 조회

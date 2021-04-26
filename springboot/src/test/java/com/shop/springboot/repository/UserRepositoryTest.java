@@ -1,7 +1,8 @@
 package com.shop.springboot.repository;
 
-import com.shop.springboot.entity.Product;
+import com.shop.springboot.entity.ProductOrder;
 import com.shop.springboot.entity.User;
+import com.shop.springboot.entity.enums.Role;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -19,94 +19,55 @@ class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CartRepository cartRepository;
+    @Autowired
+    private ProductOrderRepository productOrderRepository;
 
-    // 상품 등록
     @Test
-    public void save() {
+    public void USER_CRUD_REPOSITORY_TEST() {
         //given
-        User user = new User();
-        user.setName("spring5");
-        user.setEmail("123@12.com");
-        user.setPassword("1234");
-        user.setAddr("Addr");
-        user.setDetailAddr("DetailAddr");
 
-        //when
-        userRepository.save(user);
+        List<ProductOrder> productOrders = productOrderRepository.findAll();
 
-        //then
-        User result = userRepository.findById(user.getId()).get();
-        assertThat(result.getId()).isEqualTo(user.getId());
-    }
-
-    // 상품 리스트 조회
-    @Test
-    public void findAll() {
-
-        //given
         User user1 = new User();
         user1.setName("spring5");
-        user1.setEmail("124@12.com");
+        user1.setEmail("12^VV%^^4@12.com");
         user1.setPassword("1234");
         user1.setAddr("Addr");
         user1.setDetailAddr("DetailAddr");
+        user1.setRole(Role.USER);
+        user1.setProductOrders(productOrders);
 
         User user2 = new User();
         user2.setName("spring6");
-        user2.setEmail("125@12.com");
+        user2.setEmail("12##VVV%$#5@12.com");
         user2.setPassword("1234");
         user2.setAddr("Addr");
         user2.setDetailAddr("DetailAddr");
+        user2.setRole(Role.ADMIN);
 
+        User user3 = new User();
+        user3.setName("spring6");
+        user3.setEmail("12##VVv@%$#5@12.com");
+        user3.setPassword("1234");
+        user3.setAddr("Addr");
+        user3.setDetailAddr("DetailAddr");
+        user3.setRole(Role.ADMIN);
         List<User> result1 = userRepository.findAll();
 
         //when
         userRepository.save(user1);
         userRepository.save(user2);
+        userRepository.save(user3);
+        userRepository.delete(user2);
 
         //then
-        List<User> result2 = userRepository.findAll();
+        List<User> result2 = userRepository.findAll();          // findAll() TEST
         assertThat(result1.size()).isEqualTo(result2.size()-2);
+
+        User result = userRepository.findById(user1.getId()).get();     // findOne() TEST
+        assertThat(result.getId()).isEqualTo(user1.getId());
     }
 
-    // 상품 조회
-    @Test
-    public void findOne() {
-        //given
-        User user = new User();
-        user.setName("spring5");
-        user.setEmail("126@12.com");
-        user.setPassword("1234");
-        user.setAddr("Addr");
-        user.setDetailAddr("DetailAddr");
-
-        //when
-        userRepository.save(user);
-
-        //then
-        User result = userRepository.findById(user.getId()).get();
-        assertThat(result.getId()).isEqualTo(user.getId());
-    }
-
-    // 상품 삭제
-    @Test
-    public void delete() {
-        //given
-        User user = new User();
-        user.setName("spring5");
-        user.setEmail("172@12.com");
-        user.setPassword("1234");
-        user.setAddr("Addr");
-        user.setDetailAddr("DetailAddr");
-        List<User> result1 = userRepository.findAll();
-
-
-        //when
-        userRepository.save(user);
-        userRepository.delete(user);
-
-        //then
-        List<User> result2 = userRepository.findAll();
-        assertThat(result1.size()).isEqualTo(result2.size());
-    }
 }

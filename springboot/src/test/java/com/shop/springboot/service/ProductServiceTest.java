@@ -21,28 +21,7 @@ class ProductServiceTest {
     private ProductService productService;
 
     @Test
-    public void save() {
-        //given
-        Product product = new Product();
-        product.setName("spring5");
-        product.setPrice(10000);
-        product.setDescription("Description");
-        product.setProductImg("Path");
-        product.setDiscount(10);
-        product.setAmount(10000);
-
-        //when
-        Long saveId = productService.save(product);
-
-        //then
-        Product findProduct = productService.findOne(saveId).get();
-        assertEquals(product.getName(), findProduct.getName());
-    }
-
-    // 상품 리스트 조회
-    @Test
-    public void findProducts() {
-
+    public void PRODUCT_CRUD_SERVICE_TEST() {
         //given
         Product product1 = new Product();
         product1.setName("spring5");
@@ -65,52 +44,13 @@ class ProductServiceTest {
         //when
         productService.save(product1);
         productService.save(product2);
+        productService.delete(product2);
 
         //then
         List<Product> result2 = productService.findProducts();
-        assertThat(result1.size()).isEqualTo(result2.size()-2);
-    }
+        assertThat(result1.size()).isEqualTo(result2.size() - 1);
 
-    // 상품 조회
-    @Test
-    public void findOne() {
-        //given
-        Product product = new Product();
-        product.setName("spring5");
-        product.setPrice(10000);
-        product.setDescription("Description");
-        product.setProductImg("Path");
-        product.setDiscount(10);
-        product.setAmount(10000);
-
-        //when
-        productService.save(product);
-
-        //then
-        Product result = productService.findOne(product.getId()).get();
-        assertThat(result.getId()).isEqualTo(product.getId());
-    }
-
-    // 상품 삭제
-    @Test
-    public void delete() {
-        //given
-        Product product = new Product();
-        product.setName("spring5");
-        product.setPrice(10000);
-        product.setDescription("Description");
-        product.setProductImg("Path");
-        product.setDiscount(10);
-        product.setAmount(10000);
-        List<Product> result1 = productService.findProducts();
-
-
-        //when
-        productService.save(product);
-        productService.delete(product);
-
-        //then
-        List<Product> result2 = productService.findProducts();
-        assertThat(result1.size()).isEqualTo(result2.size());
+        Product findProduct = productService.findOne(product1.getId()).get();
+        assertEquals(product1.getName(), findProduct.getName());
     }
 }

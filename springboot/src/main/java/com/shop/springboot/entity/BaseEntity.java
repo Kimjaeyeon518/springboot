@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public class BaseEntity {
 
-
     @Column(updatable = false)
     protected LocalDateTime createdTime;
 

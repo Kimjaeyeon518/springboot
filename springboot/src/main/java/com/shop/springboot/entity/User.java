@@ -32,7 +32,10 @@ public class User extends BaseEntity {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Cart> carts = new ArrayList<Cart>();
+    private List<Cart> carts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProductOrder> productOrders;
 
     @Enumerated(EnumType.STRING)    // JPA로 데이터베이스로 저장할 때 Enum 값을 어떤 형태로 저장할지를 결정 (기본은 int형)
     private Role role;
@@ -41,16 +44,7 @@ public class User extends BaseEntity {
         return this.role.getKey();
     }
 
-    public User updateProfile(UserRequestDto userRequestDto) {
-        this.name = userRequestDto.getName();
-        this.addr = userRequestDto.getAddr();
-        this.detailAddr = userRequestDto.getDetailAddr();
-
-        return this;
-    }
-
     public UserResponseDto toResponseDto(User user) {
-
         return UserResponseDto.builder()
                 .id(user.getId())
                 .name(user.getName())

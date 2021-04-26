@@ -1,14 +1,14 @@
 package com.shop.springboot.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-import lombok.Builder;
+import com.shop.springboot.entity.enums.Category;
+import com.shop.springboot.entity.enums.ProductStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @NoArgsConstructor  // 기본 생성자
 @Getter
@@ -20,12 +20,30 @@ public class Product extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String name;
+    @Column
     private String productImg;
+    @Column
     private String description;
+    @Column
     private Integer price;
+    @Column
     private Integer discount;
-    private Integer amount;
-    private Integer buyCount = 0;
+    @Column
+    private Integer limitCount;     // 상품 재고
+    @Column
+    private Integer amount;     // 상품 구매 개수
+    @Column
+    private Integer buyCount = 0;   // 상품 구매 횟수
+
+    @Enumerated(EnumType.STRING)    // JPA로 데이터베이스로 저장할 때 Enum 값을 어떤 형태로 저장할지를 결정 (기본은 int형)
+    private ProductStatus productStatus;
+
+    @Enumerated(EnumType.STRING)    // JPA로 데이터베이스로 저장할 때 Enum 값을 어떤 형태로 저장할지를 결정 (기본은 int형)
+    private Category category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Cart> carts;
 
 }
