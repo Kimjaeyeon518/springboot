@@ -5,6 +5,7 @@ import com.shop.springboot.dto.CartDto.CartResponseDto;
 import com.shop.springboot.dto.pagingDto.PagingDto;
 import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;
+import com.shop.springboot.entity.ProductOrder;
 import com.shop.springboot.entity.User;
 import com.shop.springboot.exception.*;
 import com.shop.springboot.repository.CartRepository;
@@ -48,8 +49,8 @@ public class CartService {
         if(product.getLimitCount() < cart.getProduct().getAmount())
             throw new ProductLimitCountException("재고가 없습니다.");
 
-        if(product.getId() == cart.getProduct().getId())
-            throw new DuplicatedException("장바구니에 이미 상품이 존재합니다.");
+//        if(product.getId() == cart.getProduct().getId())
+//            throw new DuplicatedException("장바구니에 이미 상품이 존재합니다.");
 
 
         return cartRepository.save(cart).getId();
@@ -109,5 +110,15 @@ public class CartService {
 
         cartRepository.delete(cartOpt.get());
 
+    }
+
+    // 주문 리스트 조회    ->  TEST 용
+    public List<Cart> findCartsList(Long userId) {
+        return cartRepository.findAllByUserIdOrderByCreatedTimeDesc(userId);
+
+    }
+
+    public Cart findOneCart(Long cartId) {
+        return cartRepository.findById(cartId).get();
     }
 }

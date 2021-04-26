@@ -43,6 +43,17 @@ public class ProductOrderService {
         return orderOpt.get().toResponseDto();
     }
 
+    // 주문 조회    ->  ProductOrder Entity 테스트용
+    public ProductOrder findOneProductOrder(Long orderId) {
+
+        Optional<ProductOrder> orderOpt = productOrderRepository.findById(orderId);
+
+        if (!orderOpt.isPresent())
+            throw new NotExistOrderException("존재하지 않는 주문입니다.");
+
+        return orderOpt.get();
+    }
+
     public Long save(ProductOrder productOrder) {
         User user = userRepository.findById(productOrder.getUser().getId()).orElseThrow(()
                 -> new NotExistUserException("존재하지 않는 유저입니다."));
@@ -87,6 +98,13 @@ public class ProductOrderService {
 
         return null;
     }
+
+    // 주문 리스트 조회    ->  TEST 용
+    public List<ProductOrder> findProductOrdersList(Long userId) {
+        return productOrderRepository.findAllByUserIdOrderByCreatedTimeDesc(userId);
+
+    }
+
 
     // 주문 삭제
     public void delete(Long productOrderId) {
