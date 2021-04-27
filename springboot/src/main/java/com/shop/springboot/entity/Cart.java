@@ -1,5 +1,6 @@
 package com.shop.springboot.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.springboot.dto.CartDto.CartResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ public class Cart extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "product_order_id", referencedColumnName = "id")
+    @JsonIgnore
     private ProductOrder productOrder;
 
     public CartResponseDto toResponseDto(Cart cart) {

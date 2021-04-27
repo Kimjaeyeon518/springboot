@@ -2,6 +2,7 @@ package com.shop.springboot.entity;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.springboot.entity.enums.Category;
 import com.shop.springboot.entity.enums.ProductStatus;
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class Product extends BaseEntity {
     @Column
     private Integer discount;
     @Column
-    private Integer limitCount;     // 상품 재고
+    private Integer limitCount = 2000;     // 상품 재고
     @Column
     private Integer amount;     // 상품 구매 개수
     @Column
@@ -44,6 +45,7 @@ public class Product extends BaseEntity {
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Cart> carts;
 
 }
