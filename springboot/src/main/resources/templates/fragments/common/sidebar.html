@@ -1,0 +1,146 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  <a th:href="@{/}" class="brand-link text-center">
+    <span class="brand-text font-weight-light">Jaeyeon Shop</span>
+  </a>
+
+  <input id="user" name="user" hidden="true" th:value="${user}"/>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div th:if="${#strings.isEmpty( user )}" class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="info">
+        <a th:href="@{/member/login}" class="d-block" style="margin-left: 80px;">LOGIN</a>
+      </div>
+    </div>
+    <!-- Sidebar user panel (optional) -->
+    <div th:unless="${#strings.isEmpty( user )}" class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image">
+        <img th:src="${user.getPicture()}" class="img-circle elevation-2" alt="User Image">
+      </div>
+      <div class="info">
+        <a th:href="@{/member/inform}" class="d-block" th:text="${user.getName()}"></a>
+      </div>
+      <div class="info">
+        <a th:href="@{/logout}" class="d-block">LOGOUT</a>
+      </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class
+            with font-awesome or any other icon font library -->
+        <li class="nav-header">SHOP</li>
+        <li class="nav-item has-treeview">
+          <a th:href="@{/productList/(category=Outer)}" class="nav-link">
+            <i class="nav-icon fas fa-copy"></i>
+            <p>
+              Outer
+            </p>
+          </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-chart-pie"></i>
+            <p>
+              Top
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a th:href="@{/productList/(category=TopLong)}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Long</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a th:href="@{/productList/(category=TopShort)}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>1 / 2</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link">
+            <i class="nav-icon fas fa-tree"></i>
+            <p>
+              Pants
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a th:href="@{/productList/(category=PantsLong)}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Long</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a th:href="@{/productList/(category=PantsShort)}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Short</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item has-treeview">
+          <a th:href="@{/productList/(category=Shoes)}" class="nav-link">
+            <i class="nav-icon fas fa-edit"></i>
+            <p>
+              Shoes
+            </p>
+          </a>
+        </li>
+        <li class="nav-item has-treeview">
+          <a th:href="@{/productList/(category=ACC)}" class="nav-link">
+            <i class="nav-icon fas fa-table"></i>
+            <p>
+              ACC
+            </p>
+          </a>
+        </li>
+
+        <li th:unless="${#strings.isEmpty( user )}" class="nav-item has-treeview">
+          <a href="/selectCategory" class="nav-link">
+            <i class="nav-icon fas fa-table"></i>
+            <p>
+              상품 등록
+            </p>
+          </a>
+        </li>
+
+        <li th:unless="${#strings.isEmpty( user )}" class="nav-item has-treeview">
+          <a th:href="@{/cartList}" class="nav-link">
+            <i class="nav-icon fas fa-table"></i>
+            <p>
+              장바구니
+            </p>
+          </a>
+        </li>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex"></div>
+        <li class="nav-header">BOARD</li>
+        <li class="nav-item">
+          <a href="/boardList" class="nav-link">
+            <i class="nav-icon far fa-calendar-alt"></i>
+            <p>
+              자유 게시판
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/qna" class="nav-link">
+            <i class="nav-icon far fa-image"></i>
+            <p>
+              Q & A
+            </p>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

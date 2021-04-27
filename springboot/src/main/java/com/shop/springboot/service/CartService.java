@@ -46,7 +46,7 @@ public class CartService {
 
         Product product = productOpt.get();
 
-        if(product.getLimitCount() < cart.getProduct().getAmount())
+        if(product.getLimitCount() < cart.getProduct().getTotalCount())
             throw new ProductLimitCountException("재고가 없습니다.");
 
 //        if(product.getId() == cart.getProduct().getId())

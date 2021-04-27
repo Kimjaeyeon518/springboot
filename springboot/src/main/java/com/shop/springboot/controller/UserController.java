@@ -28,14 +28,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/login")
+    @GetMapping("/member/login")
     public String goLoginPage(HttpServletRequest request) {
-        return "user/login";
+        return "member/login";
     }
 
-    @GetMapping("/register")
+    @GetMapping("/member/register")
     public String goRegistrationPage(HttpServletRequest request) {
-        return "user/register";
+        return "member/register";
     }
 
     // 일반유저 회원가입

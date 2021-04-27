@@ -3,18 +3,19 @@ package com.shop.springboot.entity;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shop.springboot.dto.productDto.ProductResponseDto;
 import com.shop.springboot.entity.enums.Category;
 import com.shop.springboot.entity.enums.ProductStatus;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
+@AllArgsConstructor
 @NoArgsConstructor  // 기본 생성자
 @Getter
 @Setter
 @Entity // 테이블과 링크될 클래스
+@Builder
 public class Product extends BaseEntity {
 
     @Id
@@ -23,7 +24,7 @@ public class Product extends BaseEntity {
 
     @Column
     private String name;
-    @Column
+    @Column(length = 150)
     private String productImg;
     @Column
     private String description;
@@ -32,20 +33,63 @@ public class Product extends BaseEntity {
     @Column
     private Integer discount;
     @Column
-    private Integer limitCount = 2000;     // 상품 재고
+    private Integer limitCount;     // 상품 재고
     @Column
-    private Integer amount;     // 상품 구매 개수
+    private Integer totalCount;     // 상품 구매 개수
     @Column
-    private Integer buyCount = 0;   // 상품 구매 횟수
+    private Integer buyCount;     // 상품 구매 횟수
+    @Column
+    private String category;
 
     @Enumerated(EnumType.STRING)    // JPA로 데이터베이스로 저장할 때 Enum 값을 어떤 형태로 저장할지를 결정 (기본은 int형)
     private ProductStatus productStatus;
 
-    @Enumerated(EnumType.STRING)    // JPA로 데이터베이스로 저장할 때 Enum 값을 어떤 형태로 저장할지를 결정 (기본은 int형)
-    private Category category;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ProductImg> productImgList;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Cart> carts;
+
+    public ProductResponseDto toResponseDto() {
+
+        return ProductResponseDto.builder()
+                .id(id)
+                .name(name)
+                .category(category)
+                .price(price)
+                .discount(discount)
+                .buyCount(buyCount)
+                .limitCount(limitCount)
+                .totalCount(totalCount)
+                .productStatus(productStatus)
+                .productImg(productImg)
+                .build();
+    }
+
+    public ProductResponseDto.MainProductResponseDto toMainProductResponseDto() {
+
+        return ProductResponseDto.MainProductResponseDto.builder()
+                .id(id)
+                .name(name)
+                .productImg(productImg)
+                .price(price)
+                .discount(discount)
+                .buyCount(buyCount)
+                .build();
+    }
+
+    public ProductResponseDto.AdminProductResponseDto toAdminProductResponseDto() {
+
+        return ProductResponseDto.AdminProductResponseDto.builder()
+                .id(id)
+                .name(name)
+                .productImg(productImg)
+                .price(price)
+                .discount(discount)
+                .buyCount(buyCount)
+                .totalCount(totalCount)
+                .build();
+    }
 
 }

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <th:block th:include="fragments/common/head"></th:block>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <th:block th:include="fragments/common/navbar"></th:block>
+
+    <!-- Main Sidebar Container -->
+    <th:block th:include="fragments/common/sidebar"></th:block>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>상품 구매</h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content" style="margin-left:10px">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-primary" style="width:1200px">
+                        <div class="card-header">
+                        </div>
+                        <div class="card-body">
+                            <div class="mt-4">
+                                <h3 class="mb-0" th:text="'총 결제 금액 : ' + ${totalPrice} + ' - ' + ${totalPrice - totalDiscountPrice} + ' = ' +
+                                    ${totalDiscountPrice}"></h3>
+                            </div>
+                            <form>
+                                <input type="hidden" id="userId" th:value="${user.id}"/>
+                                <div class="form-group col-md-6">
+                                    <label for="addr">Road Address</label>
+                                    <input id="addr" name="addr" data-name="도로명주소"  class="form-control" type="text" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="detailAddr">Detail Address</label>
+                                    <input id="detailAddr" name="detailAddr" data-name="상세주소" class="form-control" type="text" />
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <a th:if="${not #lists.isEmpty( cartList )}" th:href="@{'/product/iamport/' + ${totalDiscountPrice}}" type="button" class="btn btn-primary waves-effect waves-light">주문하기</a>
+                            <a th:if="${not #lists.isEmpty( product )}" th:href="@{'/product/iamport/' + ${totalDiscountPrice}}" type="button" class="btn btn-primary waves-effect waves-light">주문하기</a>
+                            <a th:if="${not #lists.isEmpty( cartList )}" th:href="@{/cartList}" class="btn btn-secondary">주문 취소</a>
+                            <a th:if="${not #lists.isEmpty( product )}" th:href="@{'/product/' + ${product.id}}" class="btn btn-secondary">주문 취소</a>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <th:block th:include="fragments/common/footer"></th:block>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+
+</div>
+<!-- ./wrapper -->
+
+<th:block th:include="fragments/common/script"></th:block>
+</body>
+</html>

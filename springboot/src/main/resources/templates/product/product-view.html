@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <th:block th:include="fragments/common/head"></th:block>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <th:block th:include="fragments/common/navbar"></th:block>
+
+  <!-- Main Sidebar Container -->
+  <th:block th:include="fragments/common/sidebar"></th:block>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 th:text="${category}"></h1>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+
+    <!-- Default box -->
+    <div class="card card-solid">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <h3 class="d-inline-block d-sm-none" th:text="${product.name}"></h3>
+            <div class="col-12">
+              <img th:src="@{'/images/' + ${product.productImg}}" class="product-image" alt="Product Image">
+            </div>
+          </div>
+          <input th:unless="${#strings.isEmpty( user )}" type="hidden" name="userId" id="userId" th:value="${user.id}"/>
+          <input type="hidden" name="productId" id="productId" th:value="${product.id}"/>
+          <input type="hidden" id="category" th:value="${product.category}"/>
+          <div class="col-12 col-sm-6">
+            <h3 class="my-3" th:text="${product.name}"></h3>
+            <hr>
+
+            <div class="bg-gray py-2 px-3 mt-4">
+              <h4 class="mt-0">
+                <small><del class="text-center" th:text="${#numbers.formatInteger(product.price,0,'COMMA')}"></del>원</small>
+              </h4>
+              <h2 class="mb-0" th:text="${#numbers.formatInteger(product.price-(product.price*product.discount)/100,0,'COMMA')} + '원'"/>
+            </div>
+
+            <div class="btn_wrap text-center">
+
+              <a id="productToList" class="btn btn-default waves-effect waves-light" role="button">목록</a>
+              <div class="pull-right">
+                <a th:href="'/product/update/' + ${product.id}" class="btn btn-primary waves-effect waves-light" role="button">수정</a>
+                <button type="button" class="btn btn-danger waves-effect waves-light" id="btn-deleteProduct">삭제</button>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <div id="btn_addCart" class="btn btn-primary btn-lg btn-flat">
+                <i class="fas fa-cart-plus fa-lg mr-2"></i>
+                Add to Cart
+              </div>
+
+              <div id="product_buy" class="btn btn-default btn-lg btn-flat">
+                <i class="fas fa-heart fa-lg mr-2"></i>
+                Buy it !
+              </div>
+            </div>
+
+            <div class="mt-4 product-share">
+              <a href="#" class="text-gray">
+                <i class="fab fa-facebook-square fa-2x"></i>
+              </a>
+              <a href="#" class="text-gray">
+                <i class="fab fa-twitter-square fa-2x"></i>
+              </a>
+              <a href="#" class="text-gray">
+                <i class="fas fa-envelope-square fa-2x"></i>
+              </a>
+              <a href="#" class="text-gray">
+                <i class="fas fa-rss-square fa-2x"></i>
+              </a>
+            </div>
+
+          </div>
+        </div>
+        <div class="row mt-4">
+          <nav class="w-100">
+            <div class="nav nav-tabs" id="product-tab" role="tablist">
+              <a class="nav-item nav-link active" id="product-desc-tab" data-toggle="tab" href="#product-desc" role="tab" aria-controls="product-desc" aria-selected="true">설명</a>
+              <a class="nav-item nav-link" id="product-comments-tab" data-toggle="tab" href="#product-comments" role="tab" aria-controls="product-comments" aria-selected="false">리뷰</a>
+              <a class="nav-item nav-link" id="product-rating-tab" data-toggle="tab" href="#product-rating" role="tab" aria-controls="product-rating" aria-selected="false">평가</a>
+            </div>
+          </nav>
+          <div class="tab-content p-3" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="product-desc" role="tabpanel" aria-labelledby="product-desc-tab" th:text="${product.description}"></div>
+            <div class="tab-pane fade" id="product-comments" role="tabpanel" aria-labelledby="product-comments-tab">리뷰</div>
+            <div class="tab-pane fade" id="product-rating" role="tabpanel" aria-labelledby="product-rating-tab">평가</div>
+          </div>
+        </div>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+  <th:block th:include="fragments/common/footer"></th:block>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+</div>
+<!-- ./wrapper -->
+
+<th:block th:include="fragments/common/script"></th:block>
+</body>
+</html>

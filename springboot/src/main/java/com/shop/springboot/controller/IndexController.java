@@ -13,11 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class IndexController {
 
     @GetMapping("/")
-    public String main(Model model) {
-
-        model.addAttribute("pageName", "main");
-
-        return "main/main";
+    public String index(Model model) {
+        model.addAttribute("template", "fragments/content/main");
+        return "index";
     }
 
 }

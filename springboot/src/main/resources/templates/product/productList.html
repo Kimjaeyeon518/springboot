@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <th:block th:include="fragments/common/head"></th:block>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <th:block th:include="fragments/common/navbar"></th:block>
+
+    <!-- Main Sidebar Container -->
+    <th:block th:include="fragments/common/sidebar"></th:block>
+
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 th:text="${category}"></h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                <li class="breadcrumb-item active" th:text="${category}"></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+            <div class="row">
+                <div class="col-md-4" th:each="product : ${productList}">
+                    <div class="card card-outline">
+                        <div class="card-body">
+                            <!-- image -->
+                            <div class="text-center">
+                                <a th:href="@{'/product/' + ${product.id}}">
+                                    <img class="img-fluid" th:src="@{'/images/' + ${product.productImg}}" alt="Product picture">
+                                </a>
+                            </div>
+                            <!-- main -->
+                            <a th:href="@{'/product/' + ${product.id}}">
+                                <h3 class="text-dark profile-username text-center" th:text="${product.name}"></h3>
+                            </a>
+                            <small><del class="text-center" th:text="${#numbers.formatInteger(product.price,0,'COMMA')}"></del>원</small>
+                            <br/>
+                            <p class="text-center" style="font-size: 12px; color: #333333; font-weight: bold;">할인가</p>
+                            <p class="text-center" th:text="${#numbers.formatInteger(product.price-(product.price*product.discount)/100,0,'COMMA')} + '원'"></p>
+                            <!-- sub -->
+                            <ul class="list-group list-group-unbordered mb-3">
+                                <li class="list-group-item">
+                                    <i class="fas fa-reply"></i> <b>Review</b> <a class="float-right">1,322</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fas fa-star"></i> <b>Star</b> <a class="float-right">2,549</a>
+                                </li>
+                            </ul>
+                            <!-- badge -->
+                            <span class="right badge badge-danger">주문 폭주</span>
+                            <span class="right badge badge-warning">한정 수량</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <th:block th:include="fragments/common/footer"></th:block>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+
+</div>
+<!-- ./wrapper -->
+
+<th:block th:include="fragments/common/script"></th:block>
+</body>
+</html>

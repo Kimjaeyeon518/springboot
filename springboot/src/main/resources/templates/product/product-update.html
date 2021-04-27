@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <th:block th:include="fragments/common/head"></th:block>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <th:block th:include="fragments/common/navbar"></th:block>
+
+    <!-- Main Sidebar Container -->
+    <th:block th:include="fragments/common/sidebar"></th:block>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>상품 수정</h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content" style="margin-left:10px">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-primary" style="width:1200px">
+                        <div class="card-header">
+                        </div>
+                        <form th:object="${product}">
+
+                            <input type="hidden" name="productId" id="productId" th:value="*{id}"/>
+                            <input type="hidden" id="category" th:value="*{category}"/>
+
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="name">상품명</label>
+                                    <input id="name" type="text" class="form-control input_txt" th:value="*{name}" placeholder="상품명을 입력해 주세요." />
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">가격</label>
+                                    <input id="price" type="text" class="form-control input_txt" th:value="*{price}" placeholder="상품명을 입력해 주세요." />
+                                </div>
+                                <div class="form-group">
+                                    <label for="discount">할인율</label>
+                                    <input id="discount" type="text" class="form-control input_txt" th:value="*{discount}" placeholder="상품명을 입력해 주세요." />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label" for="productImg">Upload Title Image :</label>
+                                    <input type="file" id="productImg" name="productImg" class="upload-file" th:value="*{productImg}" />
+                                    <button type="button" id="uploadBtn" onclick="productUpdateObj.productTitleImgUpload()">업로드</button>
+                                </div>
+                                <div class="form-group">
+                                    <label for="description">상품 설명</label>
+                                    <textarea id="description" th:text="*{description}" class="form-control input_txt" placeholder="상품 설명을 입력해 주세요."></textarea>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <a href="javascript:void(0);" class="btn-wine-14" onclick="productUpdateObj.updateProduct();">수정</a>
+                    <a th:href="@{'/product/' + ${product.id}}" class="btn btn-secondary">취소</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <th:block th:include="fragments/common/footer"></th:block>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+
+</div>
+<!-- ./wrapper -->
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+		/*<![CDATA[*/
+
+		var productUpdateObj = {
+            uploadCheckYn   : true,
+            regex   : new RegExp("(.*?)\.(jpg|JPG|jpeg|JPEG|png|PNG)$"),
+            maxSize : 5242880,  // 5MB
+            titleImagePath : "",
+
+            checkExtension  : function(fileName, fileSize) {
+
+                if (fileSize >= this.maxSize) {
+                    alert("파일 사이즈 초과");
+                    return false;
+                }
+
+                if (!this.regex.test(fileName)) {
+                    alert("해당 종류의 파일은 업로드할 수 없습니다.");
+                    return false;
+                }
+                return true;
+            },
+
+            productTitleImgUpload   : function () {
+                var form_data = new FormData();
+
+                var inputFile = $("input[name='productImg']");
+
+                var files = inputFile[0].files;
+
+                if (files.length === 0) {
+                    alert("업로드 할 파일이 없습니다.")
+                    return;
+                }
+
+                if (!this.checkExtension(files[0].name, files[0].size))
+                    return;
+                form_data.append('file', files[0]);
+
+                $.ajax({
+                    type: "POST",
+                    url: '/product/image',
+                    cache: false,
+                    contentType: false,
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    data : form_data
+                }).done(function() {
+                        productUpdateObj.uploadCheckYn = true;
+                        productUpdateObj.titleImagePath = files[0].name;
+                        alert("상품 타이틀 이미지 업로드 완료.");
+                }).fail(function (error) {
+                        alert(JSON.stringify(error));
+                });
+            },
+
+            updateProduct   : function () {
+                var productObj = {};
+                var blankCnt = 0;
+
+                var productId = $('#productId').val();
+                var name = $('#name').val();
+                var category = $('#category').val();
+                var description = $('#description').val();
+                var price = $('#price').val();
+                var discount = $('#discount').val();
+
+                $(".input_txt").each(function() {
+
+                    if ($(this).val() === "") {
+                        blankCnt++;
+                        return false;
+                    }
+                })
+
+                if (blankCnt > 0) {
+                    alert("빈 곳이 존재합니다.")
+                    return;
+                }
+
+                productObj.name = name;
+                productObj.price = price;
+                productObj.productImg = this.titleImagePath;
+                productObj.category = category;
+                productObj.description = description;
+                productObj.discount = discount;
+
+                $.ajax({
+                    type: 'PUT',
+                    url: '/product/' + productId,
+                    data: JSON.stringify(productObj),
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8'
+                }).done(function() {
+                    alert('상품이 수정되었습니다.');
+                    window.location.href = '/product/' + productId;
+                }).fail(function (error) {
+                    alert(error.responseText);
+                });
+            }
+        }
+
+		/*]]>*/
+		</script>
+</th:block>
+
+<th:block th:include="fragments/common/script"></th:block>
+</body>
+</html>
