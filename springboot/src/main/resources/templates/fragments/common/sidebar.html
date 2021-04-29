@@ -1,28 +1,27 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
   <!-- Brand Logo -->
   <a th:href="@{/}" class="brand-link text-center">
     <span class="brand-text font-weight-light">Jaeyeon Shop</span>
+    <span sec:authorize="hasAuthority('ROLE_ADMIN')" class="brand-text font-weight-light">관리자 모드</span>
   </a>
 
   <input id="user" name="user" hidden="true" th:value="${user}"/>
 
   <!-- Sidebar -->
   <div class="sidebar">
-    <div th:if="${#strings.isEmpty( user )}" class="user-panel mt-3 pb-3 mb-3 d-flex">
+    <div sec:authorize="isAnonymous()" class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div class="info">
-        <a th:href="@{/member/login}" class="d-block" style="margin-left: 80px;">LOGIN</a>
+        <a th:href="@{/login}" class="d-block" style="margin-left: 80px;">LOGIN</a>
       </div>
     </div>
+
     <!-- Sidebar user panel (optional) -->
-    <div th:unless="${#strings.isEmpty( user )}" class="user-panel mt-3 pb-3 mb-3 d-flex">
-      <div class="image">
-        <img th:src="${user.getPicture()}" class="img-circle elevation-2" alt="User Image">
+    <div sec:authorize="isAuthenticated()" class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div sec:authorize="isAuthenticated()" class="info">
+        <a th:text="${session.user.getName()} + 님" href="/profiles" class="text-white"></a>
       </div>
-      <div class="info">
-        <a th:href="@{/member/inform}" class="d-block" th:text="${user.getName()}"></a>
-      </div>
-      <div class="info">
-        <a th:href="@{/logout}" class="d-block">LOGOUT</a>
+      <div sec:authorize="isAuthenticated()" class="info">
+        <a href="/logout" class="text-white"><i class="fa fa-user-o mr-5 text-theme-colored2"></i> Logout </a>
       </div>
     </div>
 
@@ -103,17 +102,15 @@
           </a>
         </li>
 
-        <li th:unless="${#strings.isEmpty( user )}" class="nav-item has-treeview">
+        <li sec:authorize="hasAuthority('ROLE_ADMIN')" class="nav-item has-treeview">
           <a href="/selectCategory" class="nav-link">
             <i class="nav-icon fas fa-table"></i>
             <p>
               상품 등록
             </p>
           </a>
-        </li>
-
-        <li th:unless="${#strings.isEmpty( user )}" class="nav-item has-treeview">
-          <a th:href="@{/cartList}" class="nav-link">
+        <li sec:authorize="isAuthenticated()" class="nav-item has-treeview">
+          <a th:href="@{'/cartList/' + ${session.user.getId()}}" class="nav-link">
             <i class="nav-icon fas fa-table"></i>
             <p>
               장바구니

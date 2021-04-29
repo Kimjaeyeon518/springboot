@@ -1,6 +1,7 @@
 package com.shop.springboot.service;
 
 import com.shop.springboot.dto.ProductOrderDto.ProductOrderResponseDto;
+import com.shop.springboot.dto.productDto.ProductRequestDto;
 import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;
 import com.shop.springboot.entity.ProductOrder;
@@ -33,32 +34,39 @@ class CartServiceTest {
     public void CART_CRUD_SERVICE_TEST() {
         //given
         User user = userService.findOne(12l).get();
-        Product product1 = productService.findOne(3l).get();
-        Product product2 = productService.findOne(4l).get();
+
         ProductOrder productOrder = productOrderService.findOneProductOrder(1l);
 
-        product1.setLimitCount(100);
-        product1.setAmount(10);
-        product1.setPrice(10000);
+        ProductRequestDto productRequestDto1 = new ProductRequestDto();
+        productRequestDto1.setName("spring5");
+        productRequestDto1.setPrice(10000);
+        productRequestDto1.setDescription("Description");
+        productRequestDto1.setProductImg("Path");
+        productRequestDto1.setDiscount(10);
+        productRequestDto1.setTotalCount(10000);
 
-        product2.setLimitCount(100);
-        product2.setAmount(10);
-        product2.setPrice(20000);
+        ProductRequestDto productRequestDto2 = new ProductRequestDto();
+        productRequestDto2.setName("spring5");
+        productRequestDto2.setPrice(10000);
+        productRequestDto2.setDescription("Description");
+        productRequestDto2.setProductImg("Path");
+        productRequestDto2.setDiscount(10);
+        productRequestDto2.setTotalCount(10000);
 
-        productService.save(product1);
-        productService.save(product2);
+        Long productId1 = productService.save(productRequestDto1);
+        Long productId2 = productService.save(productRequestDto2);
 
         Cart cart1 = new Cart();
         cart1.setProductCount(1);
         cart1.setProductOrder(productOrder);
         cart1.setUser(user);
-        cart1.setProduct(product1);
+        cart1.setProduct(productService.findById(productId1));
 
         Cart cart2 = new Cart();
         cart2.setProductCount(3);
         cart2.setProductOrder(productOrder);
         cart2.setUser(user);
-        cart2.setProduct(product2);
+        cart2.setProduct(productService.findById(productId2));
         List<Cart> result1 = cartService.findCartsList(user.getId());
 
         //when

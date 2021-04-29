@@ -28,12 +28,15 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/member/login")
+    @GetMapping("/login")
     public String goLoginPage(HttpServletRequest request) {
+
+        String referrer = request.getHeader("Referer");
+        request.getSession().setAttribute("prevPage", referrer);
         return "member/login";
     }
 
-    @GetMapping("/member/register")
+    @GetMapping("/register")
     public String goRegistrationPage(HttpServletRequest request) {
         return "member/register";
     }
@@ -71,11 +74,9 @@ public class UserController {
     }
 
     @PostMapping("/loginFailure")
-    public String loginFailure(ModelMap model) throws Exception {
+    public String loginFailure() throws Exception {
 
-        model.addAttribute("catMapList");
-
-        return "user/login-register";
+        return "redirect:/login";
     }
 
     // 아이디 중복 로그인

@@ -1,5 +1,6 @@
 package com.shop.springboot.service;
 
+import com.shop.springboot.dto.productDto.ProductRequestDto;
 import com.shop.springboot.entity.Product;
 import com.shop.springboot.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
@@ -23,34 +24,31 @@ class ProductServiceTest {
     @Test
     public void PRODUCT_CRUD_SERVICE_TEST() {
         //given
-        Product product1 = new Product();
-        product1.setName("spring5");
-        product1.setPrice(10000);
-        product1.setDescription("Description");
-        product1.setProductImg("Path");
-        product1.setDiscount(10);
-        product1.setAmount(10000);
+        ProductRequestDto productRequestDto1 = new ProductRequestDto();
+        productRequestDto1.setName("spring5");
+        productRequestDto1.setPrice(10000);
+        productRequestDto1.setDescription("Description");
+        productRequestDto1.setProductImg("Path");
+        productRequestDto1.setDiscount(10);
+        productRequestDto1.setTotalCount(10000);
 
-        Product product2 = new Product();
-        product2.setName("spring5");
-        product2.setPrice(10000);
-        product2.setDescription("Description");
-        product2.setProductImg("Path");
-        product2.setDiscount(10);
-        product2.setAmount(10000);
+        ProductRequestDto productRequestDto2 = new ProductRequestDto();
+        productRequestDto2.setName("spring5");
+        productRequestDto2.setPrice(10000);
+        productRequestDto2.setDescription("Description");
+        productRequestDto2.setProductImg("Path");
+        productRequestDto2.setDiscount(10);
+        productRequestDto2.setTotalCount(10000);
 
-        List<Product> result1 = productService.findProducts();
 
         //when
-        productService.save(product1);
-        productService.save(product2);
-        productService.delete(product2);
+        Long productId1 = productService.save(productRequestDto1);
+        Long productId2 = productService.save(productRequestDto2);
+        productService.deleteProduct(productId2);
 
         //then
-        List<Product> result2 = productService.findProducts();
-        assertThat(result1.size()).isEqualTo(result2.size() - 1);
 
-        Product findProduct = productService.findOne(product1.getId()).get();
-        assertEquals(product1.getName(), findProduct.getName());
+        Product findProduct = productService.findById(productId1);
+        assertEquals(productRequestDto1.getName(), findProduct.getName());
     }
 }

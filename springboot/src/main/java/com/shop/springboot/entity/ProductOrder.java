@@ -40,9 +40,6 @@ public class ProductOrder extends BaseEntity {
                 .productOrderStatus(productOrderStatus.getTitle())
                 .addr(user.getAddr())
                 .detailAddr(user.getDetailAddr())
-                .createdDate(createdDate.getYear() + "." + createdDate.getMonthValue() + "."
-                        + createdDate.getDayOfMonth() + " " + createdDate.getHour() + ":" + createdDate.getMinute() + ":"
-                        + createdDate.getSecond())
                 .carts(carts)
                 .build();
     }

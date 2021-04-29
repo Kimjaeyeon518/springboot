@@ -35,7 +35,7 @@ class ProductOrderServiceTest {
     public void PRODUCT_ORDER_CRUD_SERVICE_TEST() {
         //given
         User user1 = userService.findOne(12l).get();
-        User user2 = userService.findOne(14l).get();
+        User user2 = userService.findOne(58l).get();
 
         ProductOrder productOrder1 = new ProductOrder();
         productOrder1.setProductOrderStatus(ProductOrderStatus.ARRIVE);
@@ -53,15 +53,15 @@ class ProductOrderServiceTest {
         List<ProductOrder> result1 = productOrderService.findProductOrdersList(user1.getId());
 
         //when
-        productOrderService.save(productOrder1);
-        productOrderService.save(productOrder2);
+        Long orderId1 = productOrderService.save(productOrder1);
+        Long orderId2 = productOrderService.save(productOrder2);
         productOrderService.delete(productOrder2.getId());
 
         //then
         List<ProductOrder> result2 = productOrderService.findProductOrdersList(user1.getId());
         assertThat(result1.size()).isEqualTo(result2.size()-1);
 
-        ProductOrderResponseDto result = productOrderService.findOne(productOrderResponseDto1.getId());
+        ProductOrderResponseDto result = productOrderService.findOne(orderId1);
         assertThat(result.getId()).isEqualTo(productOrder1.getId());
     }
 }

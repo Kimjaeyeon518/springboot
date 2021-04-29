@@ -60,8 +60,8 @@ public class ProductOrderService {
 
         List<Cart> carts = cartRepository.findAllByUserIdOrderByCreatedTimeDesc(user.getId());
 
-        if(carts.isEmpty())
-            throw new NotExistProductException("장바구니에 상품이 없습니다.");
+//        if(carts.isEmpty())
+//            throw new NotExistProductException("장바구니에 상품이 없습니다.");
 
         productOrder.setCarts(carts);
 

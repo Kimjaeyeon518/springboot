@@ -229,6 +229,8 @@ var main = {
 
         var userId = $('#userId').val();
         var productId = $('#productId').val();
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
 
         var data = {
             userId: userId,
@@ -240,7 +242,11 @@ var main = {
                     url: '/product/cart',
                     data: JSON.stringify(data),
                     dataType: 'json',
-                    contentType:'application/json; charset=utf-8'
+                    contentType:'application/json',
+                    beforeSend : function(xhr)
+                   {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+       				xhr.setRequestHeader(header, token);
+                   }
                 }).done(function() {
                     alert("상품이 장바구니에 추가되었습니다!");
                 }).fail(function (error) {

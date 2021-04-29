@@ -38,7 +38,7 @@
                                     ${totalDiscountPrice}"></h3>
                             </div>
                             <form>
-                                <input type="hidden" id="userId" th:value="${user.id}"/>
+                                <input type="hidden" id="userId" th:value="${session.user.getId()}"/>
                                 <div class="form-group col-md-6">
                                     <label for="addr">Road Address</label>
                                     <input id="addr" name="addr" data-name="도로명주소"  class="form-control" type="text" />

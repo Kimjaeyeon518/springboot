@@ -32,28 +32,28 @@ class UserRepositoryTest {
 
         User user1 = new User();
         user1.setName("spring5");
-        user1.setEmail("12^VV%^^4@12.com");
+        user1.setEmail("12Z^VV%^^4@12.com");
         user1.setPassword("1234");
         user1.setAddr("Addr");
         user1.setDetailAddr("DetailAddr");
-        user1.setRole(Role.USER);
+        user1.setAuthorities(Role.USER.getKey());
         user1.setProductOrders(productOrders);
 
         User user2 = new User();
         user2.setName("spring6");
-        user2.setEmail("12##VVV%$#5@12.com");
+        user2.setEmail("12##ZZVVV%$#5@12.com");
         user2.setPassword("1234");
         user2.setAddr("Addr");
         user2.setDetailAddr("DetailAddr");
-        user2.setRole(Role.ADMIN);
+        user2.setAuthorities(Role.ADMIN.getKey());
 
         User user3 = new User();
         user3.setName("spring6");
-        user3.setEmail("12##VVv@%$#5@12.com");
+        user3.setEmail("12##ZZZVVv@%$#5@12.com");
         user3.setPassword("1234");
         user3.setAddr("Addr");
         user3.setDetailAddr("DetailAddr");
-        user3.setRole(Role.ADMIN);
+        user3.setAuthorities(Role.ADMIN.getKey());
         List<User> result1 = userRepository.findAll();
 
         //when

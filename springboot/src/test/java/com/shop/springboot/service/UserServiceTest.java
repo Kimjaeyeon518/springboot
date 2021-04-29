@@ -27,32 +27,30 @@ class UserServiceTest {
     public void USER_CRUD_SERVICE_TEST() {
 
         //given
-        User user1 = new User();
-        user1.setName("spring5");
-        user1.setEmail("~~~1212454@1.com");
-        user1.setPassword("1234");
-        user1.setAddr("Addr");
-        user1.setDetailAddr("DetailAddr");
+        UserRequestDto userRequestDto1
+                = new UserRequestDto("spring5","spring5"
+                ,"ROLE_USER", "1234"
+                , "~~~1212454@1.com", "Addr"
+                , "Addr");
 
-        User user2 = new User();
-        user2.setName("spring6");
-        user2.setEmail("~~~~~12123445@2.com");
-        user2.setPassword("1234");
-        user2.setAddr("Addr");
-        user2.setDetailAddr("DetailAddr");
+        UserRequestDto userRequestDto2
+                = new UserRequestDto("spring5","sgggng5"
+                ,"ROLE_USER", "1234"
+                , "~~~12124!!!54@1.com", "Addr"
+                , "Addr");
 
         List<User> result1 = userService.findUsers();
 
         //when
-        userService.save(user1);
-        userService.save(user2);
-        userService.delete(user2);
+        Long userId1 = userService.userRegistration(userRequestDto1);
+        Long userId2 = userService.userRegistration(userRequestDto2);
+        userService.delete(userId2);
 
         //then
         List<User> result2 = userService.findUsers();
         assertThat(result1.size()).isEqualTo(result2.size()-1);
 
-        User result = userService.findOne(user1.getId()).get();
-        assertThat(result.getId()).isEqualTo(user1.getId());
+        User result = userService.findOne(userId1).get();
+        assertThat(result.getId()).isEqualTo(userId1);
     }
 }

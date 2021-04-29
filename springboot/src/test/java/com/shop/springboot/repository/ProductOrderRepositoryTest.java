@@ -29,7 +29,7 @@ class ProductOrderRepositoryTest {
     public void PRODUCT_ORDER_CRUD_REPOSITORY_TEST() {
         //given
         User user1 = userRepository.findById(12l).get();
-        User user2 = userRepository.findById(14l).get();
+        User user2 = userRepository.findById(58l).get();
 
         ProductOrder productOrder1 = new ProductOrder();
         productOrder1.setProductOrderStatus(ProductOrderStatus.ARRIVE);

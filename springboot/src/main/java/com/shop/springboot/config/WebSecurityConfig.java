@@ -48,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter { // WebSecu
     @Override
     protected void configure(HttpSecurity http) throws Exception { // http 관련 인증 설정
         http
+                .csrf().disable()
                 .authorizeRequests() // 접근에 대한 인증 설정이 가능
 //                .antMatchers("/users**", "/carts**", "/profiles**", "/productOrders**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN") // USER, ADMIN만 접근 가능
 //                .antMatchers("/admin**").hasAuthority("ROLE_ADMIN") // ADMIN만 접근 가능
@@ -61,13 +62,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter { // WebSecu
                     .accessDeniedPage("/accessDenied")
                 .and()
                     .formLogin() // 로그인에 관한 설정
-                    .loginPage("/login") // 로그인 페이지 링크
-                    .loginProcessingUrl("/doLogin")   // 로그인 페이지 form action에 넣을 주소
+                    .loginProcessingUrl("/login")   // 로그인 페이지 form action에 넣을 주소
                     .successHandler(successHandler())
                     .failureHandler(failureHandler())
                 .and()
                     .logout() // 로그아웃에 관한 설정
-                    .logoutUrl("/doLogout")
+                    .logoutUrl("/logout")
                     .logoutSuccessUrl("/") // 로그아웃 성공시 리다이렉트 주소
                     .deleteCookies("JSESSIONID")
                     .invalidateHttpSession(true) // 세션 날리기

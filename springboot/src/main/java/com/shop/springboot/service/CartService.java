@@ -35,69 +35,32 @@ public class CartService {
     private final CartRepository cartRepository;
 
     //  장바구니 생성
-    public Long save(Cart cart) {
-        User user = userRepository.findById(cart.getUser().getId()).orElseThrow(()
-                -> new NotExistUserException("존재하지 않는 유저입니다."));
+    public Long addCart(CartRequestDto cartRequestDto) {
+        Optional<User> user = userRepository.findById(cartRequestDto.getUserId());
+        Optional<Product> product = productRepository.findById(cartRequestDto.getProductId());
+        Long duplicateProduct = 0l;
+        duplicateProduct = cartRepository.findAllByUserIdAndProductId(cartRequestDto.getUserId(), cartRequestDto.getProductId());
 
-        Optional<Product> productOpt = productRepository.findById(cart.getProduct().getId());
-
-        if(!productOpt.isPresent())
-            throw new NotExistProductException("존재하지 않는 상품입니다.");
-
-        Product product = productOpt.get();
-
-        if(product.getLimitCount() < cart.getProduct().getTotalCount())
-            throw new ProductLimitCountException("재고가 없습니다.");
-
-//        if(product.getId() == cart.getProduct().getId())
-//            throw new DuplicatedException("장바구니에 이미 상품이 존재합니다.");
-
-
-        return cartRepository.save(cart).getId();
-
+        // 중복된 상품이 이미 장바구니에 있는 경우
+        if(duplicateProduct != 0l) {
+            Optional<Cart> cart = cartRepository.findById(duplicateProduct);
+            cart.get().setProductCount(cart.get().getProductCount() + 1);
+            return cartRepository.save(cart.get()).getId();
+        }
+        else {
+            Cart cart = new Cart();
+            cart.setProductCount(1);
+            cart.setUser(user.get());
+            cart.setProduct(product.get());
+            return cartRepository.save(cart).getId();
+        }
     }
 
     // 장바구니 리스트 조회
-    public HashMap<String, Object> findCarts(Long userId, int page, Pageable pageable) {
-        int realPage = page - 1;
-        pageable = PageRequest.of(realPage, 5);
-
-        Page<Cart> cartList = cartRepository.findAllByUserIdOrderByCreatedTimeDesc(userId, pageable);
-
-        if (cartList.getTotalElements() > 0) {
-            List<CartResponseDto> cartResponseDtoList = new ArrayList<>();
-
-            for (Cart cart : cartList) {
-
-                cartResponseDtoList.add(cart.toResponseDto(cart));
-            }
-
-            PageImpl<CartResponseDto> cartLists = new PageImpl<>(cartResponseDtoList, pageable, cartList.getTotalElements());
-
-            PagingDto cartPagingDto = new PagingDto();
-            cartPagingDto.setPagingInfo(cartLists);
-
-            List<Cart> carts = cartRepository.findAllByUserIdOrderByCreatedTimeDesc(userId);
-            int checkoutPrice = 0;
-            List<Long> cartIdList = new ArrayList<>();
-
-            for (Cart cart : carts) {
-                cartIdList.add(cart.getId());
-
-                int salePrice = (int)((((float) 100 - (float)cart.getProduct().getDiscount()) / (float)100) * cart.getProduct().getPrice());
-
-                checkoutPrice += salePrice * cart.getProductCount();
-            }
-
-            HashMap<String, Object> resultMap = new HashMap<>();
-            resultMap.put("cartList", cartLists);
-            resultMap.put("cartPagingDto", cartPagingDto);
-            resultMap.put("checkoutPrice", checkoutPrice);
-            resultMap.put("cartIdList", cartIdList);
-
-            return resultMap;
-        }
-        return null;
+    public List<Cart> findAllByUserId(Long userId) {
+        return cartRepository.findAllByUserId(userId).stream()
+                .map(Cart::new)
+                .collect(Collectors.toList());
     }
 
     // 장바구니 삭제

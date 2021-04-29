@@ -43,18 +43,7 @@ public class ProductRestController {
         return ResponseEntity.ok().build();
     }
 
-    //  상품 조회
-    @GetMapping("/products/{id}")
-    public String productView(@PathVariable Long id, Model model) {
-        Product product = productService.findById(id);
-        model.addAttribute("product", product);
-        model.addAttribute("category", product.getCategory());
-
-        return "product/product-view";
-    }
-
     // 상품 추가 (관리자 권한)
-//    @ApiOperation(value = "상품 추가 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/products")
     public Long save(@RequestBody ProductRequestDto productRequestDto) {
@@ -63,6 +52,7 @@ public class ProductRestController {
     }
 
     // 상품 이미지 업로드
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/products/image")
     public ResponseEntity<?> uploadProductImage(@RequestParam("file") MultipartFile file) throws IOException {
 //        try {
@@ -79,16 +69,16 @@ public class ProductRestController {
 
 
     // 상품 수정 (관리자 권한)
-//    @ApiOperation(value = "상품 수정 (관리자 권한)")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/product/{id}")
+    @PutMapping("/products/{id}")
     public Long update(@PathVariable Long id, @RequestBody ProductRequestDto productRequestDto) throws IOException {
 
         return productService.updateProduct(id, productRequestDto);
     }
 
     //  상품 삭제
-    @DeleteMapping("/product/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/products/{id}")
     public Long delete(@PathVariable Long id) {
         productService.deleteProduct(id);
         return id;

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ public class ProductController {
         return "product/productList";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/product/update/{id}")
     public String productUpdate(@PathVariable Long id, Model model) {
         Product product = productService.findById(id);
@@ -42,15 +44,27 @@ public class ProductController {
         return "product/product-update";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/selectCategory")
     public String openSelectCategory(Model model) {
         return "product/selectCategory";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(value = "/addProduct")
     public String openProductInsert(@RequestParam(value="category", required = false) String category, Model model) {
         model.addAttribute("category", category);
         return "product/product-save";
+    }
+
+    //  상품 조회
+    @GetMapping("/products/{id}")
+    public String productView(@PathVariable Long id, Model model) {
+        Product product = productService.findById(id);
+        model.addAttribute("product", product);
+        model.addAttribute("category", product.getCategory());
+
+        return "product/product-view";
     }
 
 

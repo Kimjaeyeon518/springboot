@@ -36,12 +36,12 @@
                         <div class="card-body">
                             <!-- image -->
                             <div class="text-center">
-                                <a th:href="@{'/product/' + ${product.id}}">
+                                <a th:href="@{'/products/' + ${product.id}}">
                                     <img class="img-fluid" th:src="@{'/images/' + ${product.productImg}}" alt="Product picture">
                                 </a>
                             </div>
                             <!-- main -->
-                            <a th:href="@{'/product/' + ${product.id}}">
+                            <a th:href="@{'/products/' + ${product.id}}">
                                 <h3 class="text-dark profile-username text-center" th:text="${product.name}"></h3>
                             </a>
                             <small><del class="text-center" th:text="${#numbers.formatInteger(product.price,0,'COMMA')}"></del>원</small>

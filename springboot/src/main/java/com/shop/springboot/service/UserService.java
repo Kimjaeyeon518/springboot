@@ -29,11 +29,18 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 일반유저 회원가입
-    public void userRegistration(UserRequestDto userRequestDto) {
+    public Long userRegistration(UserRequestDto userRequestDto) {
+        if (userRepository.existsByIdentifier(userRequestDto.getIdentifier())) {
+            throw new DuplicatedException("이미 등록된 아이디 입니다!");
+        }
+
+        duplicateCheck(userRequestDto.getEmail());
+
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         userRequestDto.setAuthorities(Role.USER.getKey());
 
-        userRepository.save(userRequestDto.toEntity());
+
+        return userRepository.save(userRequestDto.toEntity()).getId();
     }
 
     public boolean duplicateCheck(String email) {
@@ -63,7 +70,7 @@ public class UserService {
     // 회원 비밀번호 변경
     public void updatePassword(Long userId, UpdatePasswordRequestDto passwordRequestDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotExistUserException("존재하지 않는 유저입니다."));
-        String beforePassword = user.getPassword();
+        String beforePassword = user .getPassword();
 
         if(!isPasswordEquals(beforePassword, passwordRequestDto.getOldPassword())) {
             throw new UpdatePasswordException("기존 비밀번호를 잘못 입력하였습니다.");

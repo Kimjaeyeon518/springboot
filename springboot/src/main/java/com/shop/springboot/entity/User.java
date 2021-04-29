@@ -43,7 +43,7 @@ public class User extends BaseEntity {
     @JsonIgnore
     private List<Cart> carts;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<ProductOrder> productOrders;
 

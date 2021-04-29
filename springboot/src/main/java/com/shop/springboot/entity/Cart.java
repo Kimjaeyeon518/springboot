@@ -38,13 +38,11 @@ public class Cart extends BaseEntity {
     @JsonIgnore
     private ProductOrder productOrder;
 
-    public CartResponseDto toResponseDto(Cart cart) {
-
-        return CartResponseDto.builder()
-                .id(cart.id)
-                .user(cart.user)
-                .product(cart.product)
-                .productCount(cart.productCount)
-                .build();
+    public Cart(Cart cart) {
+        this.id = cart.getId();
+        this.user = cart.getUser();
+        this.product = cart.getProduct();
+        this.productCount = cart.getProductCount();
+        this.productOrder = cart.getProductOrder();
     }
 }

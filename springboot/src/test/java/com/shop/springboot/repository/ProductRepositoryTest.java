@@ -31,7 +31,7 @@ class ProductRepositoryTest {
         product1.setDescription("Description");
         product1.setProductImg("Path");
         product1.setDiscount(10);
-        product1.setAmount(10000);
+        product1.setTotalCount(10000);
 
         Product product2 = new Product();
         product2.setName("spring5");
@@ -39,7 +39,7 @@ class ProductRepositoryTest {
         product2.setDescription("Description");
         product2.setProductImg("Path");
         product2.setDiscount(10);
-        product2.setAmount(10000);
+        product2.setTotalCount(10000);
 
         List<Product> result1 = productRepository.findAll();
 
