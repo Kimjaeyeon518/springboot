@@ -53,8 +53,8 @@ class ProductOrderServiceTest {
         List<ProductOrder> result1 = productOrderService.findProductOrdersList(user1.getId());
 
         //when
-        Long orderId1 = productOrderService.save(productOrder1);
-        Long orderId2 = productOrderService.save(productOrder2);
+        Long orderId1 = productOrderService.save(productOrder1.getUser().getId());
+        Long orderId2 = productOrderService.save(productOrder2.getUser().getId());
         productOrderService.delete(productOrder2.getId());
 
         //then

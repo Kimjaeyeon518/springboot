@@ -30,8 +30,8 @@ public class ProductRequestDto {
     @Size(max = 50, message = "카테고리를 알맞게 작성해주세요.")
     private String category;
 
-    @NotNull(message = "상품 재고를 작성하세요.")
-    private Integer totalCount;
+    @NotNull(message = "상품 입고를 작성하세요.")
+    private Integer limitCount;
 
     @NotNull(message = "상품 할인율을 작성하세요.")
     private Integer discount;

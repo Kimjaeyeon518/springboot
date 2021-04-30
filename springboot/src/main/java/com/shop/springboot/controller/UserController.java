@@ -1,9 +1,14 @@
 package com.shop.springboot.controller;
 
 import com.shop.springboot.dto.userDto.UserRequestDto;
+import com.shop.springboot.entity.Cart;
+import com.shop.springboot.entity.Product;
+import com.shop.springboot.entity.ProductOrder;
+import com.shop.springboot.entity.User;
 import com.shop.springboot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
@@ -14,12 +19,14 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -86,5 +93,13 @@ public class UserController {
         rttr.addFlashAttribute("duplicatedLogin", "다른 곳에서 로그인 하였습니다.");
 
         return "redirect:/";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/users/{userId}")
+    public String delete(@PathVariable Long userId, RedirectAttributes rttr) {
+        userService.delete(userId);
+        rttr.addFlashAttribute("registerComplete", "선택 회원 삭제.");
+        return "redirect:/userList";
     }
 }

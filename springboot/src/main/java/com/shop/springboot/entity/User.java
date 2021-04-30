@@ -38,6 +38,8 @@ public class User extends BaseEntity {
     private String password;
     @Column
     private String authorities;
+    @Column
+    private Character disabledYn;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -46,6 +48,17 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<ProductOrder> productOrders;
+
+    public User(User user) {
+        this.id = user.getId();
+        this.identifier = user.getIdentifier();
+        this.email = user.getEmail();
+        this.name = user.getName();
+        this.addr = user.getAddr();
+        this.detailAddr = user.getDetailAddr();
+        this.authorities = user.getAuthorities();
+        this.productOrders = user.getProductOrders();
+    }
 
     public UserResponseDto toResponseDto(User user) {
         return UserResponseDto.builder()
@@ -56,6 +69,12 @@ public class User extends BaseEntity {
                 .addr(user.getAddr())
                 .detailAddr(user.getDetailAddr())
                 .build();
+    }
+
+    public User deleteUser() {
+        this.disabledYn = 'Y';
+
+        return this;
     }
 
     public User updateProfiles(MeRequestDto meRequestDto) {

@@ -37,14 +37,6 @@ public class UserRestController {
         return userService.findUsers();
     }
 
-    //  회원 조회
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("/users/{id}")
-    public ResponseEntity<?> getProfiles(@PathVariable ("id") long userId) {
-
-        return ResponseEntity.ok().body(userService.findOne(userId));
-    }
-
     //  회원 수정
     @PreAuthorize("hasRole('ROLE_USER','ROLE_ADMIN')")
     @PutMapping("/users/{id}")

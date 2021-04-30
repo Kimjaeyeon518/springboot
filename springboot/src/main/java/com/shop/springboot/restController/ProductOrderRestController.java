@@ -12,18 +12,18 @@ public class ProductOrderRestController {
 
     private ProductOrderService productOrderService;
 
-//    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @GetMapping("/productOrders/{productOrderId}")
-    public ResponseEntity<?> getOrderDetails(@PathVariable Long orderId) {
+////    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+//    @GetMapping("/productOrders/{productOrderId}")
+//    public ResponseEntity<?> getOrderDetails(@PathVariable Long orderId) {
+//
+//        return ResponseEntity.ok().body(productOrderService.findOne(orderId));
+//    }
 
-        return ResponseEntity.ok().body(productOrderService.findOne(orderId));
-    }
-
-//    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @GetMapping("/users/{userId}/productOrders/{page}")
-    public ResponseEntity<?> getAllOrder(@PathVariable("userId") Long userId, @PathVariable("page") int page) {
-
-        return ResponseEntity.ok().body(productOrderService.findProductOrders(userId, page));
-    }
+////    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+//    @GetMapping("/users/{userId}/productOrders/{page}")
+//    public ResponseEntity<?> getAllOrder(@PathVariable("userId") Long userId, @PathVariable("page") int page) {
+//
+//        return ResponseEntity.ok().body(productOrderService.findProductOrders(userId, page));
+//    }
 
 }

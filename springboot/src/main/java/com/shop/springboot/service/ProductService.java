@@ -2,7 +2,9 @@ package com.shop.springboot.service;
 
 import com.shop.springboot.dto.productDto.ProductRequestDto;
 import com.shop.springboot.dto.productDto.ProductResponseDto;
+import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;
+import com.shop.springboot.entity.User;
 import com.shop.springboot.entity.enums.ProductStatus;
 import com.shop.springboot.entity.enums.Role;
 import com.shop.springboot.exception.NoValidProductSortException;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -40,7 +43,6 @@ public class ProductService {
 
     // 상품 등록
     public Long save(ProductRequestDto productRequestDto) {
-
         Product product = new Product();
 
         product.setName(productRequestDto.getName());
@@ -50,6 +52,9 @@ public class ProductService {
         product.setPrice(productRequestDto.getPrice());;
         product.setProductImg(productRequestDto.getProductImg());
         product.setProductStatus(ProductStatus.SALE);
+        product.setBuyCount(0);
+        product.setLimitCount(productRequestDto.getLimitCount());
+        product.setTotalCount(productRequestDto.getLimitCount());
 
         return productRepository.save(product).getId();
     }
@@ -62,24 +67,11 @@ public class ProductService {
         return productRepository.findAllByCategory(pageable, category);
     }
 
-    // 관리자 상품 상세조회
-    public ProductResponseDto.AdminProductDetailResponseDto getAdminProductDetails(Long id) {
-        Optional<Product> productOpt = productRepository.findById(id);
-
-        if (!productOpt.isPresent())
-            throw new NotExistProductException("존재하지 않는 상품입니다.");
-
-        Product product = productOpt.get();
-
-        return ProductResponseDto.AdminProductDetailResponseDto.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .price(product.getPrice())
-                .discount(product.getDiscount())
-                .productImg(product.getProductImg())
-                .category(product.getCategory())
-                .totalCount(product.getTotalCount())
-                .build();
+    // 회원 리스트 조회
+    public List<Product> findProducts() {
+        return productRepository.findAll().stream()
+                .map(Product::new)
+                .collect(Collectors.toList());
     }
 
     // 상품 정보 수정

@@ -22,10 +22,16 @@ public class Cart extends BaseEntity {
 
     @Column
     private Integer productCount;      // cart 안의 상품 개수
-    
+
+    @Column
+    private Integer totalPrice;      // 총 가격
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @Column
+    private Character disabledYn;
 
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
@@ -41,5 +47,10 @@ public class Cart extends BaseEntity {
         this.user = cart.getUser();
         this.product = cart.getProduct();
         this.productCount = cart.getProductCount();
+    }
+
+    public Cart disabledCart() {
+        disabledYn = 'Y';
+        return this;
     }
 }

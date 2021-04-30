@@ -49,6 +49,7 @@ public class UserRequestDto {
                 .email(this.getEmail())
                 .addr(this.getAddr())
                 .detailAddr(this.getDetailAddr())
+                .disabledYn('N')
                 .build();
     }
 }

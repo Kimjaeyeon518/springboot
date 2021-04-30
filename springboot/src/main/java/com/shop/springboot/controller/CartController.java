@@ -81,10 +81,10 @@ public class CartController {
 
     // 장바구니 삭제
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @GetMapping("/carts/{cartId}")
-    public String delete(@PathVariable Long cartId, RedirectAttributes rttr) {
+    @GetMapping("/carts/{cartId}/{userId}")
+    public String delete(@PathVariable Long cartId, @PathVariable Long userId, RedirectAttributes rttr) {
         cartService.delete(cartId);
         rttr.addFlashAttribute("registerComplete", "장바구니 품목 삭제.");
-        return "redirect:/";
+        return "redirect:/cartList/" + userId;
     }
 }

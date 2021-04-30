@@ -2,7 +2,10 @@ package com.shop.springboot.controller;
 
 import com.shop.springboot.dto.CartDto.CartRequestDto;
 import com.shop.springboot.dto.ProductOrderDto.ProductOrderRequestDto;
+import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;
+import com.shop.springboot.entity.ProductOrder;
+import com.shop.springboot.service.CartService;
 import com.shop.springboot.service.ProductOrderService;
 import com.shop.springboot.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -17,35 +20,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @Controller
 public class ProductOrderController {
 
+    private final CartService cartService;
     private final ProductService productService;
     private final ProductOrderService productOrderService;
-
-    @GetMapping("/productOrders")
-    public String productOrder(Model model) {
-
-        return "member/productOrders";
-    }
-
-//    // 상품창에서 바로 구매
-//    @GetMapping(value = "/product/buy/{productId}")
-//    public String buyProduct(Model model, @PathVariable Long productId) {
-//        Product product = productService.findById(productId);
-//
-//        int totalPrice = product.getPrice();
-//        int totalDiscountPrice = product.getPrice()-(product.getPrice()*product.getDiscount())/100;
-//
-//        model.addAttribute("totalPrice", totalPrice);
-//        model.addAttribute("totalDiscountPrice", totalDiscountPrice);
-//        model.addAttribute("product", product);
-//
-//        return "product/product-order";
-//    }
 
     // iamport 결제
     @GetMapping(value = "/product/iamport/{totalDiscountPrice}")
@@ -58,11 +42,25 @@ public class ProductOrderController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @PostMapping("/productOrders")
-    public String successIamport(@ModelAttribute @Valid ProductOrderRequestDto productOrderRequestDto, RedirectAttributes rttr) {
-        productOrderService.save(productOrderRequestDto);
+    @GetMapping("/productOrders/{userId}")
+    public String successIamport(@PathVariable Long userId, RedirectAttributes rttr) {
+        productOrderService.save(userId);
         rttr.addFlashAttribute("registerComplete", "결제 완료");
-        return "redirect:/productOrders/" + productOrderRequestDto.getUserId();
+        return "redirect:/";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @GetMapping("/productOrderList/{userId}")
+    public String getProductOrderList(Model model, @PathVariable Long userId) {
+
+        List<ProductOrder> productOrderList = productOrderService.findProductOrdersList(userId);
+
+        List<Cart> cartList = cartService.findAllByUserId(userId);
+
+        model.addAttribute("cartList", cartList);
+        model.addAttribute("productOrderList", productOrderList);
+
+        return "productOrder/productOrderList";
     }
 
 }

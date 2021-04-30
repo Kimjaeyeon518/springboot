@@ -4,6 +4,7 @@ import com.shop.springboot.dto.MeDto.MeRequestDto;
 import com.shop.springboot.dto.updatePasswordDto.UpdatePasswordRequestDto;
 import com.shop.springboot.dto.userDto.UserRequestDto;
 import com.shop.springboot.dto.userDto.UserResponseDto;
+import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;
 import com.shop.springboot.entity.User;
 import com.shop.springboot.entity.enums.Role;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Transactional      // Service 의  모든 메소드의 트랜잭션 처리
 @RequiredArgsConstructor    // Bean을 주입받을 때 '@Autowired' 방식이 아닌 생성자 주입 방식으로 유도
@@ -53,7 +55,9 @@ public class UserService {
 
     // 회원 리스트 조회
     public List<User> findUsers() {
-        return userRepository.findAll();
+        return userRepository.findAll().stream()
+                .map(User::new)
+                .collect(Collectors.toList());
     }
 
     // 회원 조회
@@ -64,6 +68,7 @@ public class UserService {
     // 회원 삭제
     public void delete(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotExistUserException("존재하지 않는 유저입니다."));
+
         userRepository.delete(user);
     }
 

@@ -18,7 +18,7 @@
     <!-- Sidebar user panel (optional) -->
     <div sec:authorize="isAuthenticated()" class="user-panel mt-3 pb-3 mb-3 d-flex">
       <div sec:authorize="isAuthenticated()" class="info">
-        <a th:text="${session.user.getName()} + 님" href="/profiles" class="text-white"></a>
+        <a th:text="${session.user.getName()} + 님" th:href="@{'/productOrderList/' + ${session.user.getId()}}" class="text-white"></a>
       </div>
       <div sec:authorize="isAuthenticated()" class="info">
         <a href="/logout" class="text-white"><i class="fa fa-user-o mr-5 text-theme-colored2"></i> Logout </a>
@@ -101,14 +101,6 @@
             </p>
           </a>
         </li>
-
-        <li sec:authorize="hasAuthority('ROLE_ADMIN')" class="nav-item has-treeview">
-          <a href="/selectCategory" class="nav-link">
-            <i class="nav-icon fas fa-table"></i>
-            <p>
-              상품 등록
-            </p>
-          </a>
         <li sec:authorize="isAuthenticated()" class="nav-item has-treeview">
           <a th:href="@{'/cartList/' + ${session.user.getId()}}" class="nav-link">
             <i class="nav-icon fas fa-table"></i>
@@ -117,21 +109,30 @@
             </p>
           </a>
         </li>
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex"></div>
-        <li class="nav-header">BOARD</li>
-        <li class="nav-item">
-          <a href="/boardList" class="nav-link">
-            <i class="nav-icon far fa-calendar-alt"></i>
+
+        <div sec:authorize="hasAuthority('ROLE_ADMIN')" class="user-panel mt-3 pb-3 mb-3 d-flex"></div>
+        <li sec:authorize="hasAuthority('ROLE_ADMIN')" class="nav-header">ADMIN</li>
+        <li sec:authorize="hasAuthority('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a href="/selectCategory" class="nav-link">
+            <i class="nav-icon fas fa-table"></i>
             <p>
-              자유 게시판
+              상품 등록
             </p>
           </a>
         </li>
-        <li class="nav-item">
-          <a href="/qna" class="nav-link">
-            <i class="nav-icon far fa-image"></i>
+        <li sec:authorize="hasAuthority('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a th:href="@{/userList}" class="nav-link">
+            <i class="nav-icon fas fa-table"></i>
             <p>
-              Q & A
+              회원 목록
+            </p>
+          </a>
+        </li>
+        <li sec:authorize="hasAuthority('ROLE_ADMIN')" class="nav-item has-treeview">
+          <a th:href="@{/productLimitCountList}" class="nav-link">
+            <i class="nav-icon fas fa-table"></i>
+            <p>
+              재고 현황
             </p>
           </a>
         </li>

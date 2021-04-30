@@ -33,13 +33,15 @@ public class Product extends BaseEntity {
     @Column
     private Integer discount;
     @Column
-    private Integer limitCount;     // 상품 재고
+    private Integer limitCount;     // 상품 입고
     @Column
-    private Integer totalCount;     // 상품 구매 개수
+    private Integer totalCount;     // 상품 재고
     @Column
     private Integer buyCount;     // 상품 구매 횟수
     @Column
     private String category;
+    @Column
+    private Character disabledYn;
 
     @Enumerated(EnumType.STRING)    // JPA로 데이터베이스로 저장할 때 Enum 값을 어떤 형태로 저장할지를 결정 (기본은 int형)
     private ProductStatus productStatus;
@@ -50,6 +52,19 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Cart> carts;
+
+    public Product(Product product) {
+        this.id = product.getId();
+        this.name = product.getName();
+        this.productImg = product.getProductImg();
+        this.price = product.getPrice();
+        this.description = product.getDescription();
+        this.discount = product.getDiscount();
+        this.limitCount = product.getLimitCount();
+        this.totalCount = product.getTotalCount();
+        this.buyCount = product.getBuyCount();
+        this.category = product.getCategory();
+    }
 
     public ProductResponseDto toResponseDto() {
 

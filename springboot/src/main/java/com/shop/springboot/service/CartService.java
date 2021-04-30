@@ -36,26 +36,35 @@ public class CartService {
     private final CartRepository cartRepository;
 
     //  장바구니 생성
-    public Long addCart(CartRequestDto cartRequestDto) {
+    public void addCart(CartRequestDto cartRequestDto) {
 
         Optional<User> user = userRepository.findById(cartRequestDto.getUserId());
         Optional<Product> product = productRepository.findById(cartRequestDto.getProductId());
         Long duplicateProduct = 0l;
         duplicateProduct = cartRepository.findAllByUserIdAndProductId(cartRequestDto.getUserId(), cartRequestDto.getProductId());
 
-
         if(duplicateProduct == null) {
-            Cart cart = new Cart();
-            cart.setProductCount(1);
-            cart.setUser(user.get());
-            cart.setProduct(product.get());
-            return cartRepository.save(cart).getId();
+            cartRepository.save(Cart.builder()
+                    .user(user.get())
+                    .product(product.get())
+                    .productCount(1)
+                    .disabledYn('N')
+                    .totalPrice(product.get().getPrice() - (product.get().getPrice() * product.get().getDiscount()) / 100)
+                    .build());
         }
+
         // 중복된 상품이 이미 장바구니에 있는 경우
         else {
             Optional<Cart> cart = cartRepository.findById(duplicateProduct);
             cart.get().setProductCount(cart.get().getProductCount() + 1);
-            return cartRepository.save(cart.get()).getId();
+            cart.get().setTotalPrice((product.get().getPrice() - (product.get().getPrice() * product.get().getDiscount()) / 100)
+                    * cart.get().getProductCount());
+
+            cartRepository.save(Cart.builder()
+                    .user(user.get())
+                    .product(product.get())
+                    .productCount(1)
+                    .build());
         }
     }
 
@@ -73,8 +82,8 @@ public class CartService {
         if (!cartOpt.isPresent()) {
             throw new NotExistCartException("존재하지 않는 장바구니 입니다.");
         }
-
-        cartRepository.delete(cartOpt.get());
+        Cart cart = cartOpt.get();
+        cartRepository.delete(cart);
 
     }
 

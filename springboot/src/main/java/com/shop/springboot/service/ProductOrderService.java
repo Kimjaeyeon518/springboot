@@ -4,6 +4,7 @@ import com.shop.springboot.dto.ProductOrderDto.ProductOrderRequestDto;
 import com.shop.springboot.dto.ProductOrderDto.ProductOrderResponseDto;
 import com.shop.springboot.dto.pagingDto.PagingDto;
 import com.shop.springboot.entity.Cart;
+import com.shop.springboot.entity.Product;
 import com.shop.springboot.entity.ProductOrder;
 import com.shop.springboot.entity.User;
 import com.shop.springboot.entity.enums.ProductOrderStatus;
@@ -12,6 +13,7 @@ import com.shop.springboot.exception.NotExistProductException;
 import com.shop.springboot.exception.NotExistUserException;
 import com.shop.springboot.repository.CartRepository;
 import com.shop.springboot.repository.ProductOrderRepository;
+import com.shop.springboot.repository.ProductRepository;
 import com.shop.springboot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Transactional
 @RequiredArgsConstructor
@@ -33,17 +36,18 @@ public class ProductOrderService {
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
     private final ProductOrderRepository productOrderRepository;
-
-    // 주문 조회
-    public ProductOrderResponseDto findOne(Long orderId) {
-
-        Optional<ProductOrder> orderOpt = productOrderRepository.findById(orderId);
-
-        if (!orderOpt.isPresent())
-            throw new NotExistOrderException("존재하지 않는 주문입니다.");
-
-        return orderOpt.get().toResponseDto();
-    }
+    private final ProductRepository productRepository;
+//
+//    // 주문 조회
+//    public ProductOrderResponseDto findOne(Long orderId) {
+//
+//        Optional<ProductOrder> orderOpt = productOrderRepository.findById(orderId);
+//
+//        if (!orderOpt.isPresent())
+//            throw new NotExistOrderException("존재하지 않는 주문입니다.");
+//
+//        return orderOpt.get().toResponseDto();
+//    }
 
     // 주문 조회    ->  ProductOrder Entity 테스트용
     public ProductOrder findOneProductOrder(Long orderId) {
@@ -56,8 +60,11 @@ public class ProductOrderService {
         return orderOpt.get();
     }
 
-    public Long save(ProductOrderRequestDto productOrderRequestDto) {
-        User user = userRepository.findById(productOrderRequestDto.getUserId()).orElseThrow(()
+    public Long save(Long userId) {
+
+        int totalPrice = 0;
+
+        User user = userRepository.findById(userId).orElseThrow(()
                 -> new NotExistUserException("존재하지 않는 유저입니다."));
 
         List<Cart> carts = cartRepository.findAllByUserIdOrderByCreatedTimeDesc(user.getId());
@@ -67,52 +74,32 @@ public class ProductOrderService {
 
         ProductOrder productOrder = new ProductOrder();
         productOrder.setUser(user);
-        productOrder.setProductOrderStatus(productOrderRequestDto.getProductOrderStatus());
-
-        productOrderRepository.save(productOrder).getId();
+        productOrder.setProductOrderStatus(ProductOrderStatus.WAIT);
 
         for (Cart cart : carts) {
             cart.setProductOrder(productOrder);
+            cartRepository.save(cart);
+
+            totalPrice += cart.getTotalPrice();
+
+            Product product = cart.getProduct();
+            product.setTotalCount((product.getTotalCount() - cart.getProductCount()));
+            product.setBuyCount(cart.getProductCount());
+
+            productRepository.save(product);
         }
 
-        return productOrder.getId();
+        productOrder.setTotalPrice(totalPrice);
+
+        return productOrderRepository.save(productOrder).getId();
 
     }
 
     // 주문 리스트 조회
-    public HashMap<String, Object> findProductOrders(Long userId, int page) {
-        int realPage = (page == 0) ? 0 : (page - 1);
-        PageRequest pageable = PageRequest.of(realPage, 5);
-
-        Page<ProductOrder> productOrderPage = productOrderRepository.findAllByUserIdOrderByCreatedTimeDesc(userId, pageable);
-
-        if (productOrderPage.getTotalElements() > 0) {
-            List<ProductOrderResponseDto> productOrderResponseDtoList = new ArrayList<>();
-
-            for (ProductOrder productOrder : productOrderPage) {
-                productOrderResponseDtoList.add(productOrder.toResponseDto());
-            }
-
-            PageImpl<ProductOrderResponseDto> productOrderResponseDtos
-                    = new PageImpl<>(productOrderResponseDtoList, pageable, productOrderPage.getTotalElements());
-
-            PagingDto productOrderPagingDto = new PagingDto();
-            productOrderPagingDto.setPagingInfo(productOrderResponseDtos);
-
-            HashMap<String, Object> resultMap = new HashMap<>();
-            resultMap.put("productOrderList", productOrderResponseDtos);
-            resultMap.put("productOrderPagingDto", productOrderPagingDto);
-
-            return resultMap;
-        }
-
-        return null;
-    }
-
-    // 주문 리스트 조회    ->  TEST 용
     public List<ProductOrder> findProductOrdersList(Long userId) {
-        return productOrderRepository.findAllByUserIdOrderByCreatedTimeDesc(userId);
-
+        return productOrderRepository.findAllByUserIdOrderByCreatedTimeDesc(userId).stream()
+                .map(ProductOrder::new)
+                .collect(Collectors.toList());
     }
 
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <title>장바구니</title>
+    <title>회원 목록</title>
     <th:block th:include="fragments/common/head"></th:block>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -20,7 +20,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>장바구니</h1>
+                        <h1>회원 목록</h1>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
@@ -39,63 +39,65 @@
                             <th style="width: 10%">
                                 번호
                             </th>
-                            <th style="width: 12%">
-                                상품명
-                            </th>
-                            <th style="width: 25%">
-                                상품 이미지
-                            </th>
-                            <th style="width: 20%">
-                                가격
+                            <th style="width: 10%">
+                                아이디
                             </th>
                             <th style="width: 15%">
-                                개수
+                                이메일
                             </th>
                             <th style="width: 8%">
+                                이름
+                            </th>
+                            <th style="width: 8%">
+                                권한
+                            </th>
+                            <th style="width: 20%">
+                                주소
+                            </th>
+                            <th style="width: 20%">
+                                상세주소
+                            </th>
+                            <th style="width: 10%">
                                 삭제
                             </th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:if="${not #lists.isEmpty( cartList )}"
-                            th:each="row : ${cartList}">
+                        <tr th:if="${not #lists.isEmpty( userList )}"
+                            th:each="row : ${userList}">
                             <td>
                                 <h3 th:text="${row.id}"/>
                             </td>
-                            <td class="text-left"><a
-                                    th:href="'/products/' + ${row.product.id}"
-                                    th:text="${row.product.name}"></a></td>
                             <td class="text-left">
-                                <img class="img-fluid" th:src="@{'/images/' + ${row.product.productImg}}" alt="Product picture">
+                                <h4 th:text="${row.identifier}"/>
                             </td>
                             <td class="text-left">
-                                <small><del class="text-center" th:text="${#numbers.formatInteger(row.product.price,0,'COMMA')}"></del>원</small>
-                                <h3 th:text="${#numbers.formatInteger(row.product.price-(row.product.price*row.product.discount)/100,0,'COMMA')} + '원'"/>
+                                <h4 th:text="${row.email}"/>
+                            </td>
+                            <td class="text-left">
+                                <h4 th:text="${row.name}"/>
+                            </td>
+                            <td class="text-left">
+                                <h4 th:text="${row.authorities}"/>
+                            </td>
+                            <td class="text-left">
+                                <h4 th:text="${row.addr}"/>
+                            </td>
+                            <td class="text-left">
+                                <h4 th:text="${row.detailAddr}"/>
                             </td>
                             <td>
-                                    <h2 th:text="${row.productCount}"/>
-                            </td>
-                            <td>
-                                <a th:href="'/carts/' + ${row.id} + '/' + ${session.user.getId()}">
+                                <a th:href="'/users/' + ${row.id}">
                                     <i class="nav-icon fas fa-edit" aria-hidden="true"></i>
                                 </a>
                             </td>
                         </tr>
-                        <tr th:unless="${not #lists.isEmpty( cartList )}">
-                            <td colspan="6">장바구니가 비어있습니다.</td>
+                        <tr th:unless="${not #lists.isEmpty( userList )}">
+                            <td colspan="6">회원이 없습니다.</td>
                         </tr>
                         </tbody>
                     </table>
-                    <div class="mt-4" th:if="${not #lists.isEmpty( cartList )}">
-                        <h3 class="mb-0" th:text="'총 결제 금액 : ' + ${totalPrice} + ' - ' + ${totalPrice - totalDiscountPrice} + ' = ' +
-                                    ${totalDiscountPrice}"></h3>
-                    </div>
-
                 </div>
-            </div>
-            <div th:if="${not #lists.isEmpty( cartList )}" id="cart_buy" class="btn btn-default btn-lg btn-flat">
-                <i class="fas fa-heart fa-lg mr-2 pull-right"></i>
-                Buy it !
             </div>
         </section>
     </div>
