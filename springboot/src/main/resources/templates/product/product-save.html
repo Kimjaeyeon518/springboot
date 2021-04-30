@@ -32,20 +32,21 @@
                         <div class="card card-primary" style="width:1200px">
                             <div class="card-header">
                             </div>
-                            <form>
-                                <input type="hidden" id="category" th:value="${category}"/>
+                            <form method="post" th:action="@{/products}">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                <input type="hidden" id="category" name="category" th:value="${category}"/>
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="name">상품명</label>
-                                        <input id="name" type="text" class="form-control input_txt" placeholder="상품명을 입력해 주세요." />
+                                        <input id="name" name="name" type="text" class="form-control input_txt" placeholder="상품명을 입력해 주세요." />
                                     </div>
                                     <div class="form-group">
                                         <label for="price">가격</label>
-                                        <input id="price" type="text" class="form-control input_txt" placeholder="상품명을 입력해 주세요." />
+                                        <input id="price" name="price" type="text" class="form-control input_txt" placeholder="상품명을 입력해 주세요." />
                                     </div>
                                     <div class="form-group">
                                         <label for="discount">할인율</label>
-                                        <input id="discount" type="text" class="form-control input_txt" placeholder="상품명을 입력해 주세요." />
+                                        <input id="discount" name="discount" type="text" class="form-control input_txt" placeholder="상품명을 입력해 주세요." />
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" for="productImg">Upload Title Image :</label>
@@ -53,10 +54,15 @@
                                         <button type="button" id="uploadBtn" onclick="productRegistObj.productTitleImgUpload()">업로드</button>
                                     </div>
                                     <div class="form-group">
+                                        <label for="price">상품 재고</label>
+                                        <input id="totalCount" name="totalCount" type="text" class="form-control input_txt" placeholder="상품재고를 입력해 주세요." />
+                                    </div>
+                                    <div class="form-group">
                                         <label for="description">상품 설명</label>
-                                        <textarea id="description" class="form-control input_txt" placeholder="상품 설명을 입력해 주세요."></textarea>
+                                        <textarea id="description" name="description" class="form-control input_txt" placeholder="상품 설명을 입력해 주세요."></textarea>
                                     </div>
                                 </div>
+                                <button class="btn btn-blue btn-lg btn-block btn-success mt-15" type="submit">등록</button>
                             </form>
                             <!-- /.card-body -->
                         </div>
@@ -65,7 +71,6 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <a href="javascript:void(0);" class="btn-wine-14" onclick="productRegistObj.registProduct();">등록</a>
                         <a href="/" class="btn btn-secondary">취소</a>
                     </div>
                 </div>
@@ -156,19 +161,8 @@
                     }
                 })
 
-                if (blankCnt > 0) {
-                    alert("빈 곳이 존재합니다.");
-                    return;
-                }
-
-                if (!this.uploadCheckYn) {
-                    alert("타이틀 이미지를 업로드 하세요.");
-                    return;
-                }
-
                 productObj.name = name;
                 productObj.price = price;
-                productObj.productImg = this.titleImagePath;
                 productObj.category = category;
                 productObj.description = description;
                 productObj.discount = discount;

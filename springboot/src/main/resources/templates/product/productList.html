@@ -48,15 +48,11 @@
                             <br/>
                             <p class="text-center" style="font-size: 12px; color: #333333; font-weight: bold;">할인가</p>
                             <p class="text-center" th:text="${#numbers.formatInteger(product.price-(product.price*product.discount)/100,0,'COMMA')} + '원'"></p>
-                            <!-- sub -->
-                            <ul class="list-group list-group-unbordered mb-3">
-                                <li class="list-group-item">
-                                    <i class="fas fa-reply"></i> <b>Review</b> <a class="float-right">1,322</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <i class="fas fa-star"></i> <b>Star</b> <a class="float-right">2,549</a>
-                                </li>
-                            </ul>
+
+                            <p class="text-left" style="font-size: 12px; color: #333333; font-weight: bold;">입고량</p>
+                            <p class="text-left" th:text="${product.limitCount}"></p>
+                            <p class="text-left" style="font-size: 12px; color: #333333; font-weight: bold;">재고량</p>
+                            <p class="text-left" th:text="${product.totalCount}"></p>
                             <!-- badge -->
                             <span class="right badge badge-danger">주문 폭주</span>
                             <span class="right badge badge-warning">한정 수량</span>

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -30,26 +31,20 @@ public class ProductRestController {
     private final S3Service s3Service;
     String imgPath;
     
-    //  상품 리스트 조회
-    @GetMapping("/products")
-    public ResponseEntity<?> getProductList(Model model, @PageableDefault Pageable pageable
-            , @RequestParam(value="category", required = false) String category) {
+//    //  상품 리스트 조회
+//    @GetMapping("/products")
+//    public ResponseEntity<?> getProductList(Model model, @PageableDefault Pageable pageable
+//            , @RequestParam(value="category", required = false) String category) {
+//
+//        Page<Product> productList = productService.getProductList(pageable, category);
+//
+//        model.addAttribute("productList", productList);
+//        model.addAttribute("category", category);
+//
+//        return ResponseEntity.ok().build();
+//    }
 
-        Page<Product> productList = productService.getProductList(pageable, category);
 
-        model.addAttribute("productList", productList);
-        model.addAttribute("category", category);
-
-        return ResponseEntity.ok().build();
-    }
-
-    // 상품 추가 (관리자 권한)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/products")
-    public Long save(@RequestBody ProductRequestDto productRequestDto) {
-        productRequestDto.setProductImg(imgPath);
-        return productService.save(productRequestDto);
-    }
 
     // 상품 이미지 업로드
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -67,21 +62,4 @@ public class ProductRestController {
 
     }
 
-
-    // 상품 수정 (관리자 권한)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/products/{id}")
-    public Long update(@PathVariable Long id, @RequestBody ProductRequestDto productRequestDto) throws IOException {
-
-        return productService.updateProduct(id, productRequestDto);
-    }
-
-    //  상품 삭제
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/products/{id}")
-    public Long delete(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return id;
-    }
-    
 }

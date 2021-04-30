@@ -1,5 +1,6 @@
 package com.shop.springboot.controller;
 
+import com.shop.springboot.dto.productDto.ProductRequestDto;
 import com.shop.springboot.entity.Product;
 import com.shop.springboot.service.ProductService;
 import com.shop.springboot.service.UserService;
@@ -11,9 +12,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/productList")
+    @GetMapping("/products")
     public String getProductList(Model model, @PageableDefault Pageable pageable
             , @RequestParam(value="category", required = false) String category) {
 
@@ -67,5 +69,32 @@ public class ProductController {
         return "product/product-view";
     }
 
+    // 상품 추가 (관리자 권한)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/products")
+    public String save(@ModelAttribute @Valid ProductRequestDto productRequestDto, RedirectAttributes rttr) {
+        productRequestDto.setProductImg("zzz");
+        productService.save(productRequestDto);
+        rttr.addFlashAttribute("registerComplete", "상품 등록이 완료되었습니다.");
+        return "redirect:/";
+    }
 
+    // 상품 수정 (관리자 권한)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/products/{id}")
+    public String save(@ModelAttribute @Valid ProductRequestDto productRequestDto, @PathVariable Long id, RedirectAttributes rttr) {
+        productRequestDto.setProductImg("zzz");
+        productService.updateProduct(id, productRequestDto);
+        rttr.addFlashAttribute("registerComplete", "상품 수정이 완료되었습니다.");
+        return "redirect:/product/productList";
+    }
+
+    //  상품 삭제 (관리자 권한)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/products/delete/{id}")
+    public String delete(@PathVariable Long id, RedirectAttributes rttr) {
+        productService.deleteProduct(id);
+        rttr.addFlashAttribute("registerComplete", "상품 삭제가 완료되었습니다.");
+        return "redirect:/";
+    }
 }

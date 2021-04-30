@@ -7,6 +7,7 @@ import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;
 import com.shop.springboot.entity.ProductOrder;
 import com.shop.springboot.entity.User;
+import com.shop.springboot.entity.enums.ProductStatus;
 import com.shop.springboot.exception.*;
 import com.shop.springboot.repository.CartRepository;
 import com.shop.springboot.repository.ProductRepository;
@@ -36,23 +37,25 @@ public class CartService {
 
     //  장바구니 생성
     public Long addCart(CartRequestDto cartRequestDto) {
+
         Optional<User> user = userRepository.findById(cartRequestDto.getUserId());
         Optional<Product> product = productRepository.findById(cartRequestDto.getProductId());
         Long duplicateProduct = 0l;
         duplicateProduct = cartRepository.findAllByUserIdAndProductId(cartRequestDto.getUserId(), cartRequestDto.getProductId());
 
-        // 중복된 상품이 이미 장바구니에 있는 경우
-        if(duplicateProduct != 0l) {
-            Optional<Cart> cart = cartRepository.findById(duplicateProduct);
-            cart.get().setProductCount(cart.get().getProductCount() + 1);
-            return cartRepository.save(cart.get()).getId();
-        }
-        else {
+
+        if(duplicateProduct == null) {
             Cart cart = new Cart();
             cart.setProductCount(1);
             cart.setUser(user.get());
             cart.setProduct(product.get());
             return cartRepository.save(cart).getId();
+        }
+        // 중복된 상품이 이미 장바구니에 있는 경우
+        else {
+            Optional<Cart> cart = cartRepository.findById(duplicateProduct);
+            cart.get().setProductCount(cart.get().getProductCount() + 1);
+            return cartRepository.save(cart.get()).getId();
         }
     }
 

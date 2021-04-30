@@ -3,8 +3,7 @@
 <head>
   <th:block th:include="fragments/common/head"></th:block>
 </head>
-<meta name="_csrf" content="${_csrf.token}" />
-<meta name="_csrf_header" content="${_csrf.headerName}" />
+
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
@@ -40,9 +39,6 @@
                 <img th:src="@{'/images/' + ${product.productImg}}" class="product-image" alt="Product Image">
               </div>
             </div>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            <input sec:authorize="isAuthenticated()" type="hidden" name="userId" id="userId" th:value="${session.user.getId()}"/>
-            <input type="hidden" name="productId" id="productId" th:value="${product.id}"/>
             <input type="hidden" id="category" th:value="${product.category}"/>
             <div class="col-12 col-sm-6">
               <h3 class="my-3" th:text="${product.name}"></h3>
@@ -60,21 +56,24 @@
                 <a id="productToList" class="btn btn-default waves-effect waves-light" role="button">목록</a>
                 <div class="pull-right">
                   <a sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="'/product/update/' + ${product.id}" class="btn btn-primary waves-effect waves-light" role="button">수정</a>
-                  <button sec:authorize="hasAuthority('ROLE_ADMIN')" type="button" class="btn btn-danger waves-effect waves-light" id="btn-deleteProduct">삭제</button>
+                  <form sec:authorize="hasAuthority('ROLE_ADMIN')" method="post" th:action="'/products/delete/' + ${product.id}">
+                    <div class="mt-4">
+<!--                      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />-->
+                      <input type="hidden" name="productId" id="productId" th:value="${product.id}"/>
+                      <button class="btn btn-danger waves-effect waves-light" type="submit">삭제</button>
+                    </div>
+                  </form>
                 </div>
               </div>
 
-              <div class="mt-4">
-                <div id="btn_addCart" class="btn btn-primary btn-lg btn-flat">
-                  <i class="fas fa-cart-plus fa-lg mr-2"></i>
-                  Add to Cart
+              <form method="post" th:action="@{/carts}">
+                <div class="mt-4">
+                  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                  <input sec:authorize="isAuthenticated()" type="hidden" name="userId" id="userId" th:value="${session.user.getId()}"/>
+                  <input type="hidden" name="productId" id="productId" th:value="${product.id}"/>
+                  <button class="btn btn-primary btn-lg btn-flat" type="submit">Add to Cart</button>
                 </div>
-
-                <div id="product_buy" class="btn btn-default btn-lg btn-flat">
-                  <i class="fas fa-heart fa-lg mr-2"></i>
-                  Buy it !
-                </div>
-              </div>
+              </form>
 
               <div class="mt-4 product-share">
                 <a href="#" class="text-gray">

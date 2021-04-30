@@ -22,8 +22,8 @@ public class ProductOrder extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)    // JPA로 데이터베이스로 저장할 때 Enum 값을 어떤 형태로 저장할지를 결정 (기본은 int형)
-    private ProductOrderStatus productOrderStatus;
+    @Column
+    private String productOrderStatus;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -37,7 +37,7 @@ public class ProductOrder extends BaseEntity {
 
         return ProductOrderResponseDto.builder()
                 .id(id)
-                .productOrderStatus(productOrderStatus.getTitle())
+                .productOrderStatus(ProductOrderStatus.WAIT.getKey())
                 .addr(user.getAddr())
                 .detailAddr(user.getDetailAddr())
                 .carts(carts)

@@ -21,21 +21,4 @@ public class CartRestController {
 
     private final CartService cartService;
 
-//    //  장바구니 담기
-//    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-//    @PostMapping("/product/cart")
-//    public Long addCart(@RequestBody CartRequestDto cartRequestDto) {
-//        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-//        System.out.println("USER ID == " + cartRequestDto.getUserId());
-//        System.out.println("PRODUCT ID == " + cartRequestDto.getProductId());
-//        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-//        return cartService.addCart(cartRequestDto);
-//    }
-//
-//    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-//    @DeleteMapping("/cart/{cartId}")
-//    public Long delete(@PathVariable Long cartId) {
-//        cartService.delete(cartId);
-//        return cartId;
-//    }
 }

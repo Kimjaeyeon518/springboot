@@ -1,6 +1,7 @@
 package com.shop.springboot.controller;
 
 import com.shop.springboot.dto.CartDto.CartRequestDto;
+import com.shop.springboot.dto.productDto.ProductRequestDto;
 import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;
 import com.shop.springboot.service.CartService;
@@ -11,7 +12,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -69,22 +72,19 @@ public class CartController {
 
     //  장바구니 담기
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @PostMapping(value= "/product/cart")
-    public @ResponseBody CartRequestDto addCart(@RequestBody CartRequestDto cartRequestDto) {
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-        System.out.println("USER ID == " + cartRequestDto.getUserId());
-        System.out.println("PRODUCT ID == " + cartRequestDto.getProductId());
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+    @PostMapping("/carts")
+    public String addCart(@ModelAttribute @Valid CartRequestDto cartRequestDto, RedirectAttributes rttr) {
         cartService.addCart(cartRequestDto);
-
-        return cartRequestDto;
+        rttr.addFlashAttribute("registerComplete", "상품이 장바구니에 추가되었습니다.");
+        return "redirect:/products/" + cartRequestDto.getProductId();
     }
 
+    // 장바구니 삭제
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @DeleteMapping("/cart/{cartId}")
-    public Long delete(@PathVariable Long cartId) {
+    @GetMapping("/carts/{cartId}")
+    public String delete(@PathVariable Long cartId, RedirectAttributes rttr) {
         cartService.delete(cartId);
-        return cartId;
+        rttr.addFlashAttribute("registerComplete", "장바구니 품목 삭제.");
+        return "redirect:/";
     }
-
 }

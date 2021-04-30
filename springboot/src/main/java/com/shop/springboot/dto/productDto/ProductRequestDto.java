@@ -1,15 +1,15 @@
 package com.shop.springboot.dto.productDto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Setter
 @Getter
+@Setter
+@AllArgsConstructor
+@Builder
 @ToString
 public class ProductRequestDto {
 
@@ -24,8 +24,6 @@ public class ProductRequestDto {
     @NotNull(message = "상품 가격을 작성하세요.")
     private Integer price;
 
-    @NotBlank(message = "타이틀 이미지 경로를 작성하세요.")
-    @Size(max = 200, message = "타이틀 이미지 경로를 알맞게 작성해주세요.")
     private String productImg;
 
     @NotBlank(message = "카테고리를 작성하세요.")

@@ -41,11 +41,11 @@
                                 <input type="hidden" id="userId" th:value="${session.user.getId()}"/>
                                 <div class="form-group col-md-6">
                                     <label for="addr">Road Address</label>
-                                    <input id="addr" name="addr" data-name="도로명주소"  class="form-control" type="text" />
+                                    <input id="addr" name="addr" data-name="도로명주소" th:value="${session.user.getAddr()}" class="form-control" type="text" />
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="detailAddr">Detail Address</label>
-                                    <input id="detailAddr" name="detailAddr" data-name="상세주소" class="form-control" type="text" />
+                                    <input id="detailAddr" name="detailAddr" data-name="상세주소" th:value="${session.user.getDetailAddr()}" class="form-control" type="text" />
                                 </div>
                             </form>
                         </div>

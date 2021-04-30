@@ -1,10 +1,12 @@
 package com.shop.springboot.service;
 
+import com.shop.springboot.dto.ProductOrderDto.ProductOrderRequestDto;
 import com.shop.springboot.dto.ProductOrderDto.ProductOrderResponseDto;
 import com.shop.springboot.dto.pagingDto.PagingDto;
 import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.ProductOrder;
 import com.shop.springboot.entity.User;
+import com.shop.springboot.entity.enums.ProductOrderStatus;
 import com.shop.springboot.exception.NotExistOrderException;
 import com.shop.springboot.exception.NotExistProductException;
 import com.shop.springboot.exception.NotExistUserException;
@@ -54,18 +56,26 @@ public class ProductOrderService {
         return orderOpt.get();
     }
 
-    public Long save(ProductOrder productOrder) {
-        User user = userRepository.findById(productOrder.getUser().getId()).orElseThrow(()
+    public Long save(ProductOrderRequestDto productOrderRequestDto) {
+        User user = userRepository.findById(productOrderRequestDto.getUserId()).orElseThrow(()
                 -> new NotExistUserException("존재하지 않는 유저입니다."));
 
         List<Cart> carts = cartRepository.findAllByUserIdOrderByCreatedTimeDesc(user.getId());
 
-//        if(carts.isEmpty())
-//            throw new NotExistProductException("장바구니에 상품이 없습니다.");
+        if(carts.isEmpty())
+            throw new NotExistProductException("장바구니에 상품이 없습니다.");
 
-        productOrder.setCarts(carts);
+        ProductOrder productOrder = new ProductOrder();
+        productOrder.setUser(user);
+        productOrder.setProductOrderStatus(productOrderRequestDto.getProductOrderStatus());
 
-        return productOrderRepository.save(productOrder).getId();
+        productOrderRepository.save(productOrder).getId();
+
+        for (Cart cart : carts) {
+            cart.setProductOrder(productOrder);
+        }
+
+        return productOrder.getId();
 
     }
 

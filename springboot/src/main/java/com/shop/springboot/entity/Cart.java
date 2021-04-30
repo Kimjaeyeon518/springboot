@@ -2,20 +2,18 @@ package com.shop.springboot.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shop.springboot.dto.CartDto.CartResponseDto;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
-@Slf4j
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor  // 기본 생성자
 @Getter
-@NoArgsConstructor
-@Entity
-@EntityListeners(value = {AuditingEntityListener.class})
+@Setter
+@Entity // 테이블과 링크될 클래스
+@Builder
 public class Cart extends BaseEntity {
 
     @Id
@@ -43,6 +41,5 @@ public class Cart extends BaseEntity {
         this.user = cart.getUser();
         this.product = cart.getProduct();
         this.productCount = cart.getProductCount();
-        this.productOrder = cart.getProductOrder();
     }
 }
