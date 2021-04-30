@@ -5,7 +5,7 @@ JaeyeonShop 보완 프로젝트
 
 DB
 
-![db](https://user-images.githubusercontent.com/52904664/116647003-78279700-a9b4-11eb-90c2-23d829774a07.PNG)
+![Copy of jaeyeonShop](https://user-images.githubusercontent.com/52904664/116737756-93ce8400-aa2c-11eb-8fdd-9712bd315463.png)
 
 
 Register
@@ -31,3 +31,8 @@ Login - ROLE : USER
 Login - ROLE : ADMIN
 
 ![login-admin](https://user-images.githubusercontent.com/52904664/116737535-4e11bb80-aa2c-11eb-8a6d-99b0ae410971.PNG)
+
+
+UserList
+
+![user](https://user-images.githubusercontent.com/52904664/116738147-0c354500-aa2d-11eb-907c-662a86e26d6b.PNG)
