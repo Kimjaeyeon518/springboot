@@ -3,6 +3,7 @@ package com.shop.springboot.service;
 import com.shop.springboot.dto.CartDto.CartRequestDto;
 import com.shop.springboot.dto.ProductOrderDto.ProductOrderResponseDto;
 import com.shop.springboot.dto.productDto.ProductRequestDto;
+import com.shop.springboot.dto.userDto.UserRequestDto;
 import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;
 import com.shop.springboot.entity.ProductOrder;
@@ -32,9 +33,12 @@ class CartServiceTest {
     @Test
     public void CART_CRUD_SERVICE_TEST() {
         //given
-        User user = userService.findOne(75l).get();
-
-        List<Cart> result1 = cartService.findCartsList(user.getId());
+        UserRequestDto userRequestDto1
+                = new UserRequestDto("spring5","sp5rizvbgbng5"
+                ,"ROLE_USER", "1234"
+                , "~~~12@12454@1.com", "Addr"
+                , "Addr");
+        Long userId1 = userService.userRegistration(userRequestDto1);
 
         ProductRequestDto productRequestDto1
                 = new ProductRequestDto("productName1", "Description1", 100000, "Path",
@@ -43,15 +47,13 @@ class CartServiceTest {
         ProductRequestDto productRequestDto2
                 = new ProductRequestDto("productName2", "Description2", 200000, "Path",
                 "OUTER", 2000, 20);
-
         Long productId1 = productService.save(productRequestDto1);
         Long productId2 = productService.save(productRequestDto2);
 
         CartRequestDto cartRequestDto1
-                = new CartRequestDto(75l, productId1);
+                = new CartRequestDto(userId1, productId1);
         CartRequestDto cartRequestDto2
-                = new CartRequestDto(75l, productId2);
-
+                = new CartRequestDto(userId1, productId2);
 
         //when
         Long cartId1 = cartService.addCart(cartRequestDto1);
@@ -59,9 +61,6 @@ class CartServiceTest {
         cartService.delete(cartId2);
 
         //then
-        List<Cart> result2 = cartService.findCartsList(user.getId());
-        assertThat(result1.size()).isEqualTo(result2.size()-1);
-
         Cart result = cartService.findOneCart(cartId1);
         assertThat(result.getId()).isEqualTo(cartId1);
     }

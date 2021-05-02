@@ -28,15 +28,15 @@ class UserServiceTest {
 
         //given
         UserRequestDto userRequestDto1
-                = new UserRequestDto("spring5","spring5"
+                = new UserRequestDto("spring5","spring0005"
                 ,"ROLE_USER", "1234"
-                , "~~~1212454@1.com", "Addr"
+                , "~~~1212FF454@1.com", "Addr"
                 , "Addr");
 
         UserRequestDto userRequestDto2
-                = new UserRequestDto("spring5","sgggng5"
+                = new UserRequestDto("spring5","sg000ggng5"
                 ,"ROLE_USER", "1234"
-                , "~~~12124!!!54@1.com", "Addr"
+                , "~~~12HH124!!!54@1.com", "Addr"
                 , "Addr");
 
         List<User> result1 = userService.findUsers();

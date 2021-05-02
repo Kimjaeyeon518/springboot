@@ -4,6 +4,8 @@ import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;
 import com.shop.springboot.entity.ProductOrder;
 import com.shop.springboot.entity.User;
+import com.shop.springboot.entity.enums.ProductOrderStatus;
+import com.shop.springboot.entity.enums.Role;
 import com.shop.springboot.exception.NotExistProductException;
 import com.shop.springboot.exception.NotExistUserException;
 import org.junit.jupiter.api.Test;
@@ -35,20 +37,48 @@ class CartRepositoryTest {
     @Test
     public void CART_CRUD_REPOSITORY_TEST() {
         //given
-        User user = userRepository.findById(72l).get();
-        Product product1 = productRepository.findById(31l).get();
-        Product product2 = productRepository.findById(33l).get();
-        ProductOrder productOrder = productOrderRepository.findById(25l).get();
+        User user = new User();
+        user.setName("spring5");
+        user.setIdentifier("springxx5");
+        user.setEmail("12Z^VV#xx%^^4@12.com");
+        user.setPassword("1234");
+        user.setAddr("Addr");
+        user.setDetailAddr("DetailAddr");
+        user.setAuthorities(Role.USER.getKey());
+        userRepository.save(user);
+
+        Product product1 = new Product();
+        product1.setName("spring5");
+        product1.setPrice(10000);
+        product1.setDescription("Description");
+        product1.setProductImg("Path");
+        product1.setDiscount(10);
+        product1.setTotalCount(10000);
+
+        Product product2 = new Product();
+        product2.setName("spring5");
+        product2.setPrice(10000);
+        product2.setDescription("Description");
+        product2.setProductImg("Path");
+        product2.setDiscount(10);
+        product2.setTotalCount(10000);
+
+        productRepository.save(product1);
+        productRepository.save(product2);
+
+        ProductOrder productOrder1 = new ProductOrder();
+        productOrder1.setProductOrderStatus(ProductOrderStatus.ARRIVE);
+        productOrderRepository.save(productOrder1);
 
         Cart cart1 = new Cart();
         cart1.setProductCount(0);
-        cart1.setProductOrder(productOrder);
+        cart1.setProductOrder(productOrder1);
         cart1.setUser(user);
         cart1.setProduct(product1);
 
         Cart cart2 = new Cart();
         cart2.setProductCount(0);
-        cart2.setProductOrder(productOrder);
+        cart2.setProductOrder(productOrder1);
         cart2.setUser(user);
         cart2.setProduct(product2);
         List<Cart> result1 = cartRepository.findAllByUserIdOrderByCreatedTimeDesc(user.getId());

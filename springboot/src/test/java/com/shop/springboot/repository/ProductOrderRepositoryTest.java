@@ -5,6 +5,7 @@ import com.shop.springboot.entity.Product;
 import com.shop.springboot.entity.ProductOrder;
 import com.shop.springboot.entity.User;
 import com.shop.springboot.entity.enums.ProductOrderStatus;
+import com.shop.springboot.entity.enums.Role;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,26 @@ class ProductOrderRepositoryTest {
     @Test
     public void PRODUCT_ORDER_CRUD_REPOSITORY_TEST() {
         //given
-        User user1 = userRepository.findById(72l).get();
-        User user2 = userRepository.findById(73l).get();
+        User user1 = new User();
+        user1.setName("spring5");
+        user1.setIdentifier("spfringxx5");
+        user1.setEmail("12Z^#~#VV%^^4@12.com");
+        user1.setPassword("1234");
+        user1.setAddr("Addr");
+        user1.setDetailAddr("DetailAddr");
+        user1.setAuthorities(Role.USER.getKey());
+
+        User user2 = new User();
+        user2.setName("spring6");
+        user2.setIdentifier("springxx5");
+        user2.setEmail("12##Z%%ZVVV%$#5@12.com");
+        user2.setPassword("1234");
+        user2.setAddr("Addr");
+        user2.setDetailAddr("DetailAddr");
+        user2.setAuthorities(Role.ADMIN.getKey());
+
+        userRepository.save(user1);
+        userRepository.save(user2);
 
         ProductOrder productOrder1 = new ProductOrder();
         productOrder1.setProductOrderStatus(ProductOrderStatus.ARRIVE);
