@@ -30,7 +30,7 @@
       </connection>
       <connection connection-id="b8fdb04d-064d-4ed0-ab31-e1095a29e0dc">
         <schema name="mysql" object-types="view, function, table" />
-        <schema name="springboot" object-types="procedure, view, function, table" />
+        <schema name="springboot" object-types="procedure, view, function, index, table" />
       </connection>
     </loaded-nodes>
   </component>
