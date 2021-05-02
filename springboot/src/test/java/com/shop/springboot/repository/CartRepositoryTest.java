@@ -35,10 +35,10 @@ class CartRepositoryTest {
     @Test
     public void CART_CRUD_REPOSITORY_TEST() {
         //given
-        User user = userRepository.findById(12l).get();
-        Product product1 = productRepository.findById(3l).get();
-        Product product2 = productRepository.findById(4l).get();
-        ProductOrder productOrder = productOrderRepository.findById(1l).get();
+        User user = userRepository.findById(72l).get();
+        Product product1 = productRepository.findById(31l).get();
+        Product product2 = productRepository.findById(33l).get();
+        ProductOrder productOrder = productOrderRepository.findById(25l).get();
 
         Cart cart1 = new Cart();
         cart1.setProductCount(0);

@@ -36,7 +36,7 @@ public class CartService {
     private final CartRepository cartRepository;
 
     //  장바구니 생성
-    public void addCart(CartRequestDto cartRequestDto) {
+    public Long addCart(CartRequestDto cartRequestDto) {
 
         Optional<User> user = userRepository.findById(cartRequestDto.getUserId());
         Optional<Product> product = productRepository.findById(cartRequestDto.getProductId());
@@ -44,27 +44,23 @@ public class CartService {
         duplicateProduct = cartRepository.findAllByUserIdAndProductId(cartRequestDto.getUserId(), cartRequestDto.getProductId());
 
         if(duplicateProduct == null) {
-            cartRepository.save(Cart.builder()
+            return cartRepository.save(Cart.builder()
                     .user(user.get())
                     .product(product.get())
                     .productCount(1)
                     .disabledYn('N')
-                    .totalPrice(product.get().getPrice() - (product.get().getPrice() * product.get().getDiscount()) / 100)
-                    .build());
+                    .totalPrice(product.get().getPrice() - ((product.get().getPrice() * product.get().getDiscount()) / 100))
+                    .build()).getId();
         }
 
         // 중복된 상품이 이미 장바구니에 있는 경우
         else {
             Optional<Cart> cart = cartRepository.findById(duplicateProduct);
             cart.get().setProductCount(cart.get().getProductCount() + 1);
-            cart.get().setTotalPrice((product.get().getPrice() - (product.get().getPrice() * product.get().getDiscount()) / 100)
+            cart.get().setTotalPrice((product.get().getPrice() - ((product.get().getPrice() * product.get().getDiscount()) / 100))
                     * cart.get().getProductCount());
 
-            cartRepository.save(Cart.builder()
-                    .user(user.get())
-                    .product(product.get())
-                    .productCount(1)
-                    .build());
+            return cartRepository.save(cart.get()).getId();
         }
     }
 

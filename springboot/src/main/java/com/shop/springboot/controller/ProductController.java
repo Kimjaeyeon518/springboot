@@ -86,7 +86,7 @@ public class ProductController {
         productRequestDto.setProductImg("zzz");
         productService.updateProduct(id, productRequestDto);
         rttr.addFlashAttribute("registerComplete", "상품 수정이 완료되었습니다.");
-        return "redirect:/product/productList";
+        return "redirect:/products/" + id;
     }
 
     //  상품 삭제 (관리자 권한)
