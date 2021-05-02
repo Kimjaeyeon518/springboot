@@ -32,6 +32,7 @@ class UserRepositoryTest {
 
         User user1 = new User();
         user1.setName("spring5");
+        user1.setIdentifier("bbb5555");
         user1.setEmail("12Z^VV%^^4@12.com");
         user1.setPassword("1234");
         user1.setAddr("Addr");
@@ -41,6 +42,7 @@ class UserRepositoryTest {
 
         User user2 = new User();
         user2.setName("spring6");
+        user1.setIdentifier("bbb566655");
         user2.setEmail("12##ZZVVV%$#5@12.com");
         user2.setPassword("1234");
         user2.setAddr("Addr");
@@ -49,6 +51,7 @@ class UserRepositoryTest {
 
         User user3 = new User();
         user3.setName("spring6");
+        user1.setIdentifier("bbb7785");
         user3.setEmail("12##ZZZVVv@%$#5@12.com");
         user3.setPassword("1234");
         user3.setAddr("Addr");
