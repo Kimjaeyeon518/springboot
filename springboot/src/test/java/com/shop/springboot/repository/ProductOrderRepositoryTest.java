@@ -31,7 +31,7 @@ class ProductOrderRepositoryTest {
         //given
         User user1 = new User();
         user1.setName("spring5");
-        user1.setIdentifier("spfringxx5");
+        user1.setIdentifier("spfllgxx5");
         user1.setEmail("12Z^#~#VV%^^4@12.com");
         user1.setPassword("1234");
         user1.setAddr("Addr");
@@ -40,7 +40,7 @@ class ProductOrderRepositoryTest {
 
         User user2 = new User();
         user2.setName("spring6");
-        user2.setIdentifier("springxx5");
+        user2.setIdentifier("skkgxx5");
         user2.setEmail("12##Z%%ZVVV%$#5@12.com");
         user2.setPassword("1234");
         user2.setAddr("Addr");

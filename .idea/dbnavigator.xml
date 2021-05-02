@@ -29,6 +29,7 @@
         <schema name="springboot" object-types="procedure, view, function, table" />
       </connection>
       <connection connection-id="b8fdb04d-064d-4ed0-ab31-e1095a29e0dc">
+        <schema name="mysql" object-types="view, function, table" />
         <schema name="springboot" object-types="procedure, view, function, table" />
       </connection>
     </loaded-nodes>
@@ -42,7 +43,9 @@
 CHARACTER SET = 'utf8'
 COLLATE = 'utf8_general_ci';
 
-show variables like 'c%';]]></console>
+show variables like 'c%';
+
+delete from `user` ;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">

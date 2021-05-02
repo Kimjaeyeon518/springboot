@@ -39,7 +39,7 @@ class CartRepositoryTest {
         //given
         User user = new User();
         user.setName("spring5");
-        user.setIdentifier("springxx5");
+        user.setIdentifier("spc6v333x5");
         user.setEmail("12Z^VV#xx%^^4@12.com");
         user.setPassword("1234");
         user.setAddr("Addr");

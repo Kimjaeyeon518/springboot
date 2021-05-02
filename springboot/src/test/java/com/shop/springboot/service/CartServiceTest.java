@@ -34,7 +34,7 @@ class CartServiceTest {
     public void CART_CRUD_SERVICE_TEST() {
         //given
         UserRequestDto userRequestDto1
-                = new UserRequestDto("spring5","iggzczv5"
+                = new UserRequestDto("spring5","qwergzczv5"
                 ,"ROLE_USER", "1234"
                 , "~~~12@12454@1.com", "Addr"
                 , "Addr");

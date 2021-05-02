@@ -28,13 +28,13 @@ class UserServiceTest {
 
         //given
         UserRequestDto userRequestDto1
-                = new UserRequestDto("spring5","spring0005"
+                = new UserRequestDto("spring5","1234zxc005"
                 ,"ROLE_USER", "1234"
                 , "~~~1212FF454@1.com", "Addr"
                 , "Addr");
 
         UserRequestDto userRequestDto2
-                = new UserRequestDto("spring5","sg000ggng5"
+                = new UserRequestDto("spring5","sfasd3ng5"
                 ,"ROLE_USER", "1234"
                 , "~~~12HH124!!!54@1.com", "Addr"
                 , "Addr");

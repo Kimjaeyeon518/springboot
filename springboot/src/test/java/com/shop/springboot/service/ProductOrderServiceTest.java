@@ -43,12 +43,12 @@ class ProductOrderServiceTest {
         //given
 
         UserRequestDto userRequestDto1
-                = new UserRequestDto("spring5","777777ng5"
+                = new UserRequestDto("spring5","asdf77ng5"
                 ,"ROLE_USER", "1234"
                 , "~~~12@12454@1.com", "Addr"
                 , "Addr");
         UserRequestDto userRequestDto2
-                = new UserRequestDto("spring5","88888ng5"
+                = new UserRequestDto("spring5","zxcv88ng5"
                 ,"ROLE_USER", "1234"
                 , "~~~12@12$$454@1.com", "Addr"
                 , "Addr");
