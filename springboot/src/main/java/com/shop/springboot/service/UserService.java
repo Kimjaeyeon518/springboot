@@ -39,7 +39,7 @@ public class UserService {
         duplicateCheck(userRequestDto.getEmail());
 
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        userRequestDto.setAuthorities(Role.ADMIN.getKey());
+        userRequestDto.setAuthorities(Role.USER.getKey());
 
 
         return userRepository.save(userRequestDto.toEntity()).getId();
