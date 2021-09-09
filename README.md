@@ -1,4 +1,4 @@
-# springboot
+# springboot-shop
 
 JaeyeonShop 보완 프로젝트
 
