@@ -1,4 +1,4 @@
-package com.shop.springboot.controller;
+package com.shop.springboot.controller.admin;
 
 import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;

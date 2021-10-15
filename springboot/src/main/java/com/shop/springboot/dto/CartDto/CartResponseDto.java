@@ -7,12 +7,11 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@Builder
 @ToString
 public class CartResponseDto {
 
     private Long id;
     private User user;
     private Product product;
-    private Integer productCount;
+    private Integer count;
 }

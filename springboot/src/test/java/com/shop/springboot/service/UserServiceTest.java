@@ -44,15 +44,15 @@ class UserServiceTest {
         List<User> result1 = userService.findUsers();
 
         //when
-        Long userId1 = userService.userRegistration(userRequestDto1);
-        Long userId2 = userService.userRegistration(userRequestDto2);
-        userService.delete(userId2);
+        userService.userRegistration(userRequestDto1);
+        userService.userRegistration(userRequestDto2);
+//        userService.delete(userId2);
 
         //then
         List<User> result2 = userService.findUsers();
         assertThat(result1.size()).isEqualTo(result2.size()-1);
-
-        User result = userService.findOne(userId1).get();
-        assertThat(result.getId()).isEqualTo(userId1);
+//
+//        User result = userService.findOne(userId1).get();
+//        assertThat(result.getId()).isEqualTo(userId1);
     }
 }

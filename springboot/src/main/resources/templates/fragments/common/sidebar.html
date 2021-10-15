@@ -102,7 +102,7 @@
           </a>
         </li>
         <li sec:authorize="isAuthenticated()" class="nav-item has-treeview">
-          <a th:href="@{'/cartList/' + ${session.user.getId()}}" class="nav-link">
+          <a th:href="@{'/carts/' + ${session.user.getId()}}" class="nav-link">
             <i class="nav-icon fas fa-table"></i>
             <p>
               장바구니

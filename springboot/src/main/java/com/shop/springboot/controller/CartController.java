@@ -1,7 +1,6 @@
 package com.shop.springboot.controller;
 
 import com.shop.springboot.dto.CartDto.CartRequestDto;
-import com.shop.springboot.dto.productDto.ProductRequestDto;
 import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;
 import com.shop.springboot.service.CartService;
@@ -17,15 +16,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @Controller
 public class CartController {
 
     private final CartService cartService;
     private final ProductService productService;
 
-    @GetMapping("/cartList/{id}")
+    @GetMapping("/carts/{id}")
     public String cartList(Model model, @PathVariable("id") Long userId) {
 
         List<Cart> cartList = cartService.findAllByUserId(userId);
@@ -35,15 +34,15 @@ public class CartController {
             Long productId = cart.getProduct().getId();
             Product product = productService.findById(productId);
 
-            totalPrice += product.getPrice() * cart.getProductCount();
-            totalDiscountPrice += (product.getPrice()-(product.getPrice()*product.getDiscount())/100) * cart.getProductCount();
+            totalPrice += product.getPrice() * cart.getCount();
+            totalDiscountPrice += (product.getPrice()-(product.getPrice()*product.getDiscount())/100) * cart.getCount();
         }
 
         model.addAttribute("cartList", cartList);
         model.addAttribute("totalPrice", totalPrice);
         model.addAttribute("totalDiscountPrice", totalDiscountPrice);
 
-        return "cart/cartList";
+        return "index";
     }
 
     // 장바구니에서 구매
@@ -59,8 +58,8 @@ public class CartController {
             Long productId = cart.getProduct().getId();
             Product product = productService.findById(productId);
 
-            totalPrice += product.getPrice() * cart.getProductCount();
-            totalDiscountPrice += (product.getPrice()-(product.getPrice()*product.getDiscount())/100) * cart.getProductCount();
+            totalPrice += product.getPrice() * cart.getCount();
+            totalDiscountPrice += (product.getPrice()-(product.getPrice()*product.getDiscount())/100) * cart.getCount();
         }
 
         model.addAttribute("totalPrice", totalPrice);
@@ -85,6 +84,6 @@ public class CartController {
     public String delete(@PathVariable Long cartId, @PathVariable Long userId, RedirectAttributes rttr) {
         cartService.delete(cartId);
         rttr.addFlashAttribute("registerComplete", "장바구니 품목 삭제.");
-        return "redirect:/cartList/" + userId;
+        return "redirect:/carts/" + userId;
     }
 }

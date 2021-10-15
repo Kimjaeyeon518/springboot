@@ -39,17 +39,15 @@ public class UserRequestDto {
     @Size(max = 20, message = "상세주소를 알맞게 작성해주세요.")
     private String detailAddr;
 
-    public User toEntity() {
-
+    public User toEntity(UserRequestDto requestDto) {
         return User.builder()
-                .authorities(this.getAuthorities())
-                .identifier(this.getIdentifier())
-                .password(this.getPassword())
-                .name(this.getName())
-                .email(this.getEmail())
-                .addr(this.getAddr())
-                .detailAddr(this.getDetailAddr())
-                .disabledYn('N')
+                .authorities(requestDto.getAuthorities())
+                .identifier(requestDto.getIdentifier())
+                .password(requestDto.getPassword())
+                .name(requestDto.getName())
+                .email(requestDto.getEmail())
+                .addr(requestDto.getAddr())
+                .detailAddr(requestDto.getDetailAddr())
                 .build();
     }
 }

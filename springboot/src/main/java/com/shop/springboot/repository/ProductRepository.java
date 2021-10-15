@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findById(Long productId);
 
-    @Query(value = "SELECT p FROM Product p ORDER BY p.totalCount ASC")
+    @Query(value = "SELECT p FROM Product p")
     List<Product> findAll();
 
     @Query(value = "SELECT p FROM Product p WHERE p.category=:category ORDER BY p.id DESC")

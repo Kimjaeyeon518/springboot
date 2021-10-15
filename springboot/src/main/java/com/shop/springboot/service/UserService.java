@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Transactional      // Service 의  모든 메소드의 트랜잭션 처리
+@Transactional      // Service 의  모든 메소드에 트랜잭션 처리
 @RequiredArgsConstructor    // Bean을 주입받을 때 '@Autowired' 방식이 아닌 생성자 주입 방식으로 유도
 @Service
 public class UserService {
@@ -41,8 +41,7 @@ public class UserService {
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         userRequestDto.setAuthorities(Role.ADMIN.getKey());
 
-
-        return userRepository.save(userRequestDto.toEntity()).getId();
+        return userRepository.save(userRequestDto.toEntity(userRequestDto)).getId();
     }
 
     public boolean duplicateCheck(String email) {
@@ -55,9 +54,7 @@ public class UserService {
 
     // 회원 리스트 조회
     public List<User> findUsers() {
-        return userRepository.findAll().stream()
-                .map(User::new)
-                .collect(Collectors.toList());
+        return userRepository.findAll();
     }
 
     // 회원 조회
@@ -75,7 +72,7 @@ public class UserService {
     // 회원 비밀번호 변경
     public void updatePassword(Long userId, UpdatePasswordRequestDto passwordRequestDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new NotExistUserException("존재하지 않는 유저입니다."));
-        String beforePassword = user .getPassword();
+        String beforePassword = user.getPassword();
 
         if(!isPasswordEquals(beforePassword, passwordRequestDto.getOldPassword())) {
             throw new UpdatePasswordException("기존 비밀번호를 잘못 입력하였습니다.");

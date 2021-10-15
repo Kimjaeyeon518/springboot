@@ -26,7 +26,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Transactional      // Service 의 모든 메소드의 트랜잭션 처리
-@RequiredArgsConstructor    // Bean을 주입받을 때 '@Autowired' 방식이 아닌 생성자 주입 방식으로 유도
+@RequiredArgsConstructor
 @Service
 public class ProductService {
 
@@ -43,18 +43,13 @@ public class ProductService {
 
     // 상품 등록
     public Long save(ProductRequestDto productRequestDto) {
-        Product product = new Product();
-
-        product.setName(productRequestDto.getName());
-        product.setCategory(productRequestDto.getCategory());
-        product.setDescription(productRequestDto.getDescription());
-        product.setDiscount(productRequestDto.getDiscount());
-        product.setPrice(productRequestDto.getPrice());;
-        product.setProductImg(productRequestDto.getProductImg());
-        product.setProductStatus(ProductStatus.SALE);
-        product.setBuyCount(0);
-        product.setLimitCount(productRequestDto.getLimitCount());
-        product.setTotalCount(productRequestDto.getLimitCount());
+        Product product = Product.builder()
+                .name(productRequestDto.getName())
+//                .category(productRequestDto.getCategory())
+                .description(productRequestDto.getDescription())
+                .discount(productRequestDto.getDiscount())
+                .price(productRequestDto.getPrice())
+                .build();
 
         return productRepository.save(product).getId();
     }
@@ -69,25 +64,23 @@ public class ProductService {
 
     // 회원 리스트 조회
     public List<Product> findProducts() {
-        return productRepository.findAll().stream()
-                .map(Product::new)
-                .collect(Collectors.toList());
+        return productRepository.findAll();
     }
 
     // 상품 정보 수정
-    public Long updateProduct(Long id, ProductRequestDto productRequestDto) {
+    public void updateProduct(Long id, ProductRequestDto productRequestDto) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다. id=" + id));
 
-        product.setName(productRequestDto.getName());
-        product.setCategory(productRequestDto.getCategory());
-        product.setDescription(productRequestDto.getDescription());
-        product.setDiscount(productRequestDto.getDiscount());
-        product.setPrice(productRequestDto.getPrice());
-        product.setProductImg(productRequestDto.getProductImg());
-        product.setProductStatus(ProductStatus.SALE);
+//        product.setName(productRequestDto.getName());
+//        product.setCategory(productRequestDto.getCategory());
+//        product.setDescription(productRequestDto.getDescription());
+//        product.setDiscount(productRequestDto.getDiscount());
+//        product.setPrice(productRequestDto.getPrice());
+//        product.setProductImg(productRequestDto.getProductImg());
+//        product.setProductStatus(ProductStatus.SALE);
 
-        return productRepository.save(product).getId();
+        productRepository.save(product);
     }
 
     // 상품 삭제

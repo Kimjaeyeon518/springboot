@@ -3,7 +3,6 @@ package com.shop.springboot.controller;
 import com.shop.springboot.dto.userDto.UserRequestDto;
 import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;
-import com.shop.springboot.entity.ProductOrder;
 import com.shop.springboot.entity.User;
 import com.shop.springboot.service.UserService;
 import lombok.RequiredArgsConstructor;

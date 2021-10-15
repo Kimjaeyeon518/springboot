@@ -55,7 +55,7 @@
                         <div class="col-12">
                             <a th:if="${not #lists.isEmpty( cartList )}" th:href="@{'/product/iamport/' + ${totalDiscountPrice}}" type="button" class="btn btn-primary waves-effect waves-light">주문하기</a>
                             <a th:if="${not #lists.isEmpty( product )}" th:href="@{'/product/iamport/' + ${totalDiscountPrice}}" type="button" class="btn btn-primary waves-effect waves-light">주문하기</a>
-                            <a th:if="${not #lists.isEmpty( cartList )}" th:href="@{/cartList}" class="btn btn-secondary">주문 취소</a>
+                            <a th:if="${not #lists.isEmpty( cartList )}" th:href="@{/carts}" class="btn btn-secondary">주문 취소</a>
                             <a th:if="${not #lists.isEmpty( product )}" th:href="@{'/product/' + ${product.id}}" class="btn btn-secondary">주문 취소</a>
                         </div>
                     </div>

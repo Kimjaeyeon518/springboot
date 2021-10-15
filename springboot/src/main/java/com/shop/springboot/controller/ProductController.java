@@ -3,7 +3,6 @@ package com.shop.springboot.controller;
 import com.shop.springboot.dto.productDto.ProductRequestDto;
 import com.shop.springboot.entity.Product;
 import com.shop.springboot.service.ProductService;
-import com.shop.springboot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -33,7 +32,7 @@ public class ProductController {
         model.addAttribute("productList", productList);
         model.addAttribute("category", category);
 
-        return "product/productList";
+        return "product/index";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -43,7 +42,7 @@ public class ProductController {
 
         model.addAttribute("product", product);
 
-        return "product/product-update";
+        return "update_form";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -56,7 +55,7 @@ public class ProductController {
     @GetMapping(value = "/addProduct")
     public String openProductInsert(@RequestParam(value="category", required = false) String category, Model model) {
         model.addAttribute("category", category);
-        return "product/product-save";
+        return "save_form";
     }
 
     //  상품 조회
@@ -66,7 +65,7 @@ public class ProductController {
         model.addAttribute("product", product);
         model.addAttribute("category", product.getCategory());
 
-        return "product/product-view";
+        return "show";
     }
 
     // 상품 추가 (관리자 권한)

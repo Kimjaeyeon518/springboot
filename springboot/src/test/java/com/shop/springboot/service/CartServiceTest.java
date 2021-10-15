@@ -6,7 +6,6 @@ import com.shop.springboot.dto.productDto.ProductRequestDto;
 import com.shop.springboot.dto.userDto.UserRequestDto;
 import com.shop.springboot.entity.Cart;
 import com.shop.springboot.entity.Product;
-import com.shop.springboot.entity.ProductOrder;
 import com.shop.springboot.entity.User;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -32,13 +31,14 @@ class CartServiceTest {
 
     @Test
     public void CART_CRUD_SERVICE_TEST() {
-        //given
+        // given
         UserRequestDto userRequestDto1
                 = new UserRequestDto("spring5","qwergzczv5"
                 ,"ROLE_USER", "1234"
                 , "~~~12@12454@1.com", "Addr"
                 , "Addr");
-        Long userId1 = userService.userRegistration(userRequestDto1);
+
+        Long uid = userService.userRegistration(userRequestDto1);
 
         ProductRequestDto productRequestDto1
                 = new ProductRequestDto("productName1", "Description1", 100000, "Path",
@@ -47,21 +47,24 @@ class CartServiceTest {
         ProductRequestDto productRequestDto2
                 = new ProductRequestDto("productName2", "Description2", 200000, "Path",
                 "OUTER", 2000, 20);
-        Long productId1 = productService.save(productRequestDto1);
-        Long productId2 = productService.save(productRequestDto2);
+
+        Long pid1 = productService.save(productRequestDto1);
+        Long pid2 = productService.save(productRequestDto2);
 
         CartRequestDto cartRequestDto1
-                = new CartRequestDto(userId1, productId1);
+                = new CartRequestDto(uid, pid1, 1);
         CartRequestDto cartRequestDto2
-                = new CartRequestDto(userId1, productId2);
+                = new CartRequestDto(uid, pid2, 2);
 
         //when
-        Long cartId1 = cartService.addCart(cartRequestDto1);
-        Long cartId2 = cartService.addCart(cartRequestDto2);
-        cartService.delete(cartId2);
+        Long cid1 = cartService.addCart(cartRequestDto1);
+        Long cid2 = cartService.addCart(cartRequestDto2);
 
         //then
-        Cart result = cartService.findOneCart(cartId1);
-        assertThat(result.getId()).isEqualTo(cartId1);
+        List<Cart> result = cartService.findAllByUserId(uid);
+        for(Cart cart : result) {
+            System.out.println(cart.getProduct().getName());
+        }
+//        assertThat(result.getId()).isEqualTo(cartId1);
     }
 }
